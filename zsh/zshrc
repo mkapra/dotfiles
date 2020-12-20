@@ -1,0 +1,121 @@
+##############################################################################
+# zsh Configuration File
+# edited: 19. Dec 2020
+##############################################################################
+# Uncomment the following line to use case-sensitive completion.
+CASE_SENSITIVE="true"
+
+##############################################################################
+# Aliases
+##############################################################################
+# General
+alias v="nvim"
+alias g="git"
+# C++
+alias g+="g++ -std=c++17"
+
+# Uni
+alias s1="cd ~/Documents/uni/semester1"
+alias s2="cd ~/Documents/uni/semester2"
+alias s3="cd ~/Documents/uni/semester3"
+
+##############################################################################
+# Variables
+##############################################################################
+export PATH=$HOME/bin:/usr/local/bin:$PATH:/Applications/
+export HOMEBREW_NO_AUTO_UPDATE=1 # No autoupdate for homebrew
+export LC_ALL=en_US.UTF-8
+export LC_CTYPE=en_US.UTF-8
+export EDITOR=nvim
+
+autoload -U colors && colors
+
+##############################################################################
+# Git
+##############################################################################
+# Checks if working tree is dirty
+function parse_git_dirty() {
+  local STATUS
+  local -a FLAGS
+  FLAGS=('--porcelain')
+  if [[ "${DISABLE_UNTRACKED_FILES_DIRTY:-}" == "true" ]]; then
+    FLAGS+='--untracked-files=no'
+  fi
+  FLAGS+="--ignore-submodules=${GIT_STATUS_IGNORE_SUBMODULES:-dirty}"
+  STATUS=$(git status ${FLAGS} 2> /dev/null | tail -n1)
+  if [[ -n $STATUS ]]; then
+    echo "*"
+  else
+    echo ""
+  fi
+}
+
+autoload -Uz vcs_info
+precmd_vcs_info() { vcs_info }
+precmd_functions+=( precmd_vcs_info )
+setopt prompt_subst
+zstyle ':vcs_info:git:*' formats '<%b>'
+
+##############################################################################
+# Theme
+##############################################################################
+return_code="%(?..%{$fg[red]%}%? ↵%{$reset_color%})"
+host_color="%(!.%{$fg[red]%}.%{$fg[green]%})"
+
+PROMPT="${host_color}%m%{$reset_color%} %2~ %{$fg[yellow]%}\$vcs_info_msg_0_\$(parse_git_dirty)%{$reset_color%}%B»%b "
+RPS1="${return_code}"
+
+unset return_code host_color
+
+##############################################################################
+# Autocompletion
+##############################################################################
+fpath=(~/.zsh/completion $fpath) # Add path to custom scripts
+autoload -U compinit
+compinit
+
+# Show completion menu when number of options is at least 2
+zstyle ':completion:*' menu select=2
+
+##############################################################################
+# vi-Mode
+##############################################################################
+bindkey -v
+bindkey '^r' history-incremental-search-backward
+bindkey '^a' beginning-of-line
+bindkey '^e' end-of-line
+bindkey '^P' up-history
+bindkey '^N' down-history
+bindkey '\e.' insert-last-word
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+bindkey -s '^F' 'fg^M'
+bindkey -s '^O' 'vim $(fzf)^M'
+
+##############################################################################
+# FZF Color
+##############################################################################
+_gen_fzf_default_opts() {
+  local color00='#002b36'
+  local color01='#073642'
+  local color02='#586e75'
+  local color03='#657b83'
+  local color04='#839496'
+  local color05='#93a1a1'
+  local color06='#eee8d5'
+  local color07='#fdf6e3'
+  local color08='#dc322f'
+  local color09='#cb4b16'
+  local color0A='#b58900'
+  local color0B='#859900'
+  local color0C='#2aa198'
+  local color0D='#268bd2'
+  local color0E='#6c71c4'
+  local color0F='#d33682'
+
+  export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --color=bg+:$color01,bg:$color00,spinner:$color0C,hl:$color0D --color=fg:$color04,header:$color0D,info:$color0A,pointer:$color0C --color=marker:$color0C,fg+:$color06,prompt:$color0A,hl+:$color0D"
+}
+
+_gen_fzf_default_opts
+export PATH="/usr/local/opt/llvm/bin:$PATH"

@@ -1,0 +1,18 @@
+set	imap_user="maximilian@kapra.de"
+set	folder="imaps://maximilian@kapra.de@mail.kapra.de"
+set	smtp_url="smtp://maximilian@kapra.de@mail.kapra.de:587"
+set	from="maximilian@kapra.de"
+set	realname="Maximilian Kapra"
+set	spoolfile=+INBOX
+set	record=+Sent
+set	postponed=+Drafts
+set	trash="+Trash"
+
+mailboxes = \
+	=INBOX \
+	+Sent \
+	+Archive \
+	+save \
+	+uni \
+	+uni/Gitlab \
+	+uni/moodle
