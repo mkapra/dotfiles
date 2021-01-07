@@ -19,6 +19,12 @@ alias s1="cd ~/Documents/uni/semester1"
 alias s2="cd ~/Documents/uni/semester2"
 alias s3="cd ~/Documents/uni/semester3"
 
+alias pico="v"
+alias nano="v"
+alias vi="v"
+alias emacs="v"
+alias sublime-text="v"
+
 ##############################################################################
 # Variables
 ##############################################################################
