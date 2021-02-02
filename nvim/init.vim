@@ -24,8 +24,13 @@ Plug 'tmhedberg/SimpylFold' " Code folding
 Plug 'Shougo/neosnippet.vim'
 Plug 'mkapra/neosnippet-snippets', { 'branch': 'mkapra_specific' } " Snippets
 
-Plug 'neovim/nvim-lspconfig'
+if has ("nvim")
+    Plug 'neovim/nvim-lspconfig'
+endif
+
 Plug 'nvim-lua/completion-nvim' " Fancy autocomplete
+
+Plug 'brooth/far.vim'
 
 Plug 'pechorin/any-jump.vim'
 " Plug 'habamax/vim-asciidoctor'
@@ -43,6 +48,8 @@ call plug#end()
 " augroup END
 
 map <C-n> :Explore<CR>
+" Allow saving of files as sudo when I forgot to start vim using sudo.
+cmap w!! w !sudo tee > /dev/null %
 
 " ======================================================== airline
 let g:airline_powerline_fonts = 1
@@ -154,17 +161,18 @@ if has ("nvim")
     " Go to references
     nnoremap <silent> gr  <cmd>lua vim.lsp.buf.references()<CR>
     nnoremap <silent> K   <cmd>lua vim.lsp.buf.hover()<CR>
+
+    " require'nvim_lsp'.ccls.setup{}
+    lua <<EOF
+      require'nvim_lsp'.sourcekit.setup{}
+
+      require'nvim_lsp'.rust_analyzer.setup{}
+
+      require'nvim_lsp'.pyls.setup{}
+      require'nvim_lsp'.texlab.setup{}
+      require'nvim_lsp'.intelephense.setup{}
+      require'nvim_lsp'.yamlls.setup{}
+      require'nvim_lsp'.solargraph.setup{}
+EOF
 endif
 
-" require'nvim_lsp'.ccls.setup{}
-lua <<EOF
-  require'nvim_lsp'.sourcekit.setup{}
-
-  require'nvim_lsp'.rust_analyzer.setup{}
-
-  require'nvim_lsp'.pyls.setup{}
-  require'nvim_lsp'.texlab.setup{}
-  require'nvim_lsp'.intelephense.setup{}
-  require'nvim_lsp'.yamlls.setup{}
-  require'nvim_lsp'.solargraph.setup{}
-EOF
