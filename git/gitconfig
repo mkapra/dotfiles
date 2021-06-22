@@ -11,6 +11,7 @@
 
 [commit]
     gpgsign = true
+    template = ~/.gitmessage
 
 [alias]
     a = add
@@ -25,6 +26,7 @@
     ds = diff --staged
     find = !git ls-files "*"/"$1"
     fo = fetch origin
+    fp = fetch --prune origin
     l = log
     p = !git push origin $(git rev-parse --abbrev-ref HEAD)
     rc = rebase --continue
@@ -57,3 +59,9 @@
     process = git-lfs filter-process
     required = true
     smudge = git-lfs smudge -- %f
+
+[pull]
+    rebase = false
+
+[init]
+    defaultBranch = main

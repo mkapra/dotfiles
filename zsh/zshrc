@@ -1,37 +1,32 @@
 ##############################################################################
 # zsh Configuration File
-# edited: 19. Dec 2020
+# edited: 20. April 2021
 ##############################################################################
-# Uncomment the following line to use case-sensitive completion.
-CASE_SENSITIVE="true"
 
 ##############################################################################
 # Aliases
 ##############################################################################
-# General
-alias v="nvim"
+alias ls="ls -G"
 alias g="git"
-# C++
-alias g+="g++ -std=c++17"
+alias gc="gitmoji -c"
+alias g+="g++ -std=c++17" # C++
 
-# Uni
-alias s1="cd ~/Documents/uni/semester1"
-alias s2="cd ~/Documents/uni/semester2"
-alias s3="cd ~/Documents/uni/semester3"
-
-alias pico="v"
+alias v="nvim"
 alias nano="v"
 alias vi="v"
-alias emacs="v"
 alias sublime-text="v"
+
+alias ave="ansible-vault edit"
 
 ##############################################################################
 # Variables
 ##############################################################################
-export PATH=$HOME/bin:/usr/local/bin:$PATH:/Applications/
+export PATH=$HOME/bin:/usr/local/bin:$PATH:/Applications/:/usr/local/opt/llvm/bin
 export HOMEBREW_NO_AUTO_UPDATE=1 # No autoupdate for homebrew
 export LC_ALL=en_US.UTF-8
 export LC_CTYPE=en_US.UTF-8
+export JAVA_HOME=$(/usr/libexec/java_home)
+
 export EDITOR=nvim
 
 autoload -U colors && colors
@@ -63,15 +58,13 @@ setopt prompt_subst
 zstyle ':vcs_info:git:*' formats '<%b>'
 
 ##############################################################################
-# Theme
+# PS
 ##############################################################################
 return_code="%(?..%{$fg[red]%}%? ↵%{$reset_color%})"
 host_color="%(!.%{$fg[red]%}.%{$fg[green]%})"
 
-PROMPT="${host_color}%m%{$reset_color%} %2~ %{$fg[yellow]%}\$vcs_info_msg_0_\$(parse_git_dirty)%{$reset_color%}%B»%b "
+PROMPT=" %2~ %{$fg[yellow]%}\$vcs_info_msg_0_\$(parse_git_dirty)%{$reset_color%}%B${host_color}➤%{$reset_color%}%b "
 RPS1="${return_code}"
-
-unset return_code host_color
 
 ##############################################################################
 # Autocompletion
@@ -81,12 +74,13 @@ autoload -U compinit
 compinit
 
 # Show completion menu when number of options is at least 2
-zstyle ':completion:*' menu select=2
+# + case insensitive path-completion 
+zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} l:|=* r:|=*' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} l:|=* r:|=*' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} l:|=* r:|=*' menu select=2
 
 ##############################################################################
-# vi-Mode
+# Keybindings
 ##############################################################################
-bindkey -v
+bindkey -v # vi mode
 bindkey '^r' history-incremental-search-backward
 bindkey '^a' beginning-of-line
 bindkey '^e' end-of-line
@@ -94,37 +88,28 @@ bindkey '^P' up-history
 bindkey '^N' down-history
 bindkey '\e.' insert-last-word
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-bindkey -s '^F' 'fg^M'
 bindkey -s '^O' 'vim $(fzf)^M'
+bindkey -s '^F' 'fg^M'
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 ##############################################################################
 # FZF Color
 ##############################################################################
-_gen_fzf_default_opts() {
-  local color00='#002b36'
-  local color01='#073642'
-  local color02='#586e75'
-  local color03='#657b83'
-  local color04='#839496'
-  local color05='#93a1a1'
-  local color06='#eee8d5'
-  local color07='#fdf6e3'
-  local color08='#dc322f'
-  local color09='#cb4b16'
-  local color0A='#b58900'
-  local color0B='#859900'
-  local color0C='#2aa198'
-  local color0D='#268bd2'
-  local color0E='#6c71c4'
-  local color0F='#d33682'
+test -e "${HOME}/.iterm2_shell_integration.zsh" && \
+  source "${HOME}/.iterm2_shell_integration.zsh"
 
-  export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --color=bg+:$color01,bg:$color00,spinner:$color0C,hl:$color0D --color=fg:$color04,header:$color0D,info:$color0A,pointer:$color0C --color=marker:$color0C,fg+:$color06,prompt:$color0A,hl+:$color0D"
-}
-
-_gen_fzf_default_opts
-export PATH="/usr/local/opt/llvm/bin:$PATH"
-
+##############################################################################
+# Misc
+##############################################################################
 # Github API Key for Homebrew
 source $HOME/.github_homebrew_key
+# Haskell
+[ -f "/Users/mkapra/.ghcup/env" ] && source "/Users/mkapra/.ghcup/env"
+
+# export NVM_DIR="$HOME/.nvm"
+# [ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
+# [ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && . "/usr/local/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+export PATH="$PATH:$HOME/.rvm/bin"
