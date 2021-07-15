@@ -76,11 +76,17 @@ fpath=(~/.zsh/completion $fpath) # Add path to custom scripts
 autoload -U compinit
 compinit
 
+# zsh History
+HISTFILE=~/.zsh_history
+HISTSIZE=10000
+SAVEHIST=10000
+setopt share_history
+
 # Show completion menu when number of options is at least 2
 # + case insensitive path-completion 
 zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} l:|=* r:|=*' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} l:|=* r:|=*' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} l:|=* r:|=*' menu select=2
 
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#ff00ff,bg=red,bold,underline"
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#ADD8E6,underline"
 source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 ##############################################################################
@@ -96,6 +102,8 @@ bindkey '\e.' insert-last-word
 
 bindkey -s '^O' 'vim $(fzf)^M'
 bindkey -s '^F' 'fg^M'
+
+bindkey '^ ' autosuggest-accept
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
