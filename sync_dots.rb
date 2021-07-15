@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
 
+require 'fileutils'
+
 def replace_home_path(destination)
   destination.gsub("~", Dir.home)
 end
@@ -8,6 +10,12 @@ def move_file(filename, destination)
   puts "Writing dotfile #{filename} to #{destination}"
 
   destination = replace_home_path(destination)
+
+  # Create necessary folders
+  unless Dir.exists? destination
+    FileUtils.mkdir_p destination.split('/').tap(&:pop).join('/')
+  end
+
   # Remove first line comment
   dotfile = File.readlines(filename).drop(1)
   File.open(destination, 'w+') do |f|
