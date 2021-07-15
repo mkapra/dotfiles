@@ -80,6 +80,9 @@ compinit
 # + case insensitive path-completion 
 zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} l:|=* r:|=*' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} l:|=* r:|=*' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} l:|=* r:|=*' menu select=2
 
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#ff00ff,bg=red,bold,underline"
+source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+
 ##############################################################################
 # Keybindings
 ##############################################################################
