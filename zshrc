@@ -1,3 +1,5 @@
+# ~/.zshrc
+
 ##############################################################################
 # zsh Configuration File
 # edited: 20. April 2021
@@ -25,7 +27,7 @@ export PATH=$HOME/bin:/usr/local/bin:$PATH:/Applications/:/usr/local/opt/llvm/bi
 export HOMEBREW_NO_AUTO_UPDATE=1 # No autoupdate for homebrew
 export LC_ALL=en_US.UTF-8
 export LC_CTYPE=en_US.UTF-8
-export JAVA_HOME=$(/usr/libexec/java_home)
+[ -f /usr/libexec/java_home ] && export JAVA_HOME=$(/usr/libexec/java_home)
 
 export EDITOR=nvim
 
@@ -103,13 +105,9 @@ test -e "${HOME}/.iterm2_shell_integration.zsh" && \
 # Misc
 ##############################################################################
 # Github API Key for Homebrew
-source $HOME/.github_homebrew_key
+[ -f $HOME/.github_homebrew_key ] && source $HOME/.github_homebrew_key
 # Haskell
 [ -f "/Users/mkapra/.ghcup/env" ] && source "/Users/mkapra/.ghcup/env"
-
-# export NVM_DIR="$HOME/.nvm"
-# [ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
-# [ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && . "/usr/local/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="$PATH:$HOME/.rvm/bin"

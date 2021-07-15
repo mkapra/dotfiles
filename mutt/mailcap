@@ -1,3 +1,0 @@
-text/html; w3m -I %{charset} -T text/html; copiousoutput;
-Image/JPEG; open %s
-application/pdf; open %s

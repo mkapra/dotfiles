@@ -1,3 +1,5 @@
+# ~/.gitconfig
+
 [core]
     editor = vim
 
@@ -22,6 +24,7 @@
     cob = checkout -b
     com = checkout master
     cp = cherry-pick
+    cc = cherry-pick --continue
     d = diff
     ds = diff --staged
     find = !git ls-files "*"/"$1"
