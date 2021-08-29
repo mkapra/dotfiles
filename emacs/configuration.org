@@ -1,0 +1,341 @@
+# ~/.emacs.d/configuration.org
+
+#+TITLE: Emacs Configuration
+#+AUTHOR: Maximilian Kapra
+#+OPTIONS: toc:nil num:nil
+
+* Variables
+#+begin_src emacs-lisp
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(auto-dark-emacs/dark-theme 'doom-one)
+ '(auto-dark-emacs/light-theme 'doom-solarized-light)
+ '(custom-safe-themes
+   '("4f1d2476c290eaa5d9ab9d13b60f2c0f1c8fa7703596fa91b235db7f99a9441b" default))
+ '(onrg-file-apps
+   '(("\\.pdf\\'" . "open %s")
+     (auto-mode . emacs)
+     (directory . emacs)
+     ("\\.mm\\'" . default)
+     ("\\.x?html?\\'" . default))))
+#+end_src
+
+#+begin_src emacs-lisp
+(setq make-backup-files nil
+      auto-mode-case-fold nil
+      auto-save-default nil
+      inhibit-startup-screen t
+      tramp-default-method "ssh"
+      initial-major-mode 'fundamental-mode
+      initial-scratch-message nil
+      org-image-actual-width nil
+      org-hide-emphasis-markers t
+      calendar-week-start-day 1
+      fast-but-imprecise-scrolling t)
+#+end_src
+
+* Performance settings
+- Set the gc threshold high initially so the init.el can just be loaded in one move
+#+begin_src emacs-lisp
+(setq gc-cons-threshold most-positive-fixnum) ; 2^61 bytes
+#+end_src
+Lower the gc threshold again afterwards
+#+begin_src emacs-lisp
+(add-hook 'emacs-startup-hook
+  (lambda ()
+    (setq gc-cons-threshold (* 32 1024 1024))))
+#+end_src
+
+- This is important for e.g. lsp mode
+#+begin_src emacs-lisp
+(setq read-process-output-max (* 3 1024 1024))
+#+end_src
+
+- Disable bidirectional text scanning for a modest performance boost. I've set
+this to `nil' in the past, but the `bidi-display-reordering's docs say that
+is an undefined state and suggest this to be just as good:
+#+begin_src emacs-lisp
+(setq-default bidi-display-reordering 'left-to-right
+              bidi-paragraph-direction 'left-to-right)
+#+end_src
+
+- Disabling the BPA makes redisplay faster, but might produce incorrect display
+reordering of bidirectional text with embedded parentheses and other bracket
+characters whose 'paired-bracket' Unicode property is non-nil.
+This is a Emacs 27 only!
+#+begin_src emacs-lisp
+(setq bidi-inhibit-bpa t)
+#+end_src
+
+- Reduce rendering/line scan work for Emacs by not rendering cursors or regions
+in non-focused windows.
+#+begin_src emacs-lisp
+(setq-default cursor-in-non-selected-windows nil)
+(setq highlight-nonselected-windows nil)
+#+end_src
+
+- Emacs "updates" its ui more often than it needs to, so slow it down slightly.
+The default is 0.5 for this setting.
+#+begin_src emacs-lisp
+(setq idle-update-delay 1.0)
+#+end_src
+
+- Introduced in Emacs HEAD (b2f8c9f), this inhibits fontification while
+receiving input, which should help a little with scrolling performance.
+#+begin_src emacs-lisp
+(setq redisplay-skip-fontification-on-input t)
+#+end_src
+
+* Package Manager: straight
+#+begin_src emacs-lisp
+(setq straight-check-for-modifications 'live)
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 5))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
+
+;; inhibit package.el load
+(setq package-enable-at-startup nil)
+(straight-use-package 'use-package)
+#+end_src
+
+* Appearance
+** Show Trailing Whitespaces and tabs
+#+begin_src emacs-lisp
+(global-whitespace-mode t)
+(setq whitespace-style '(face trailing tabs tab-mark))
+#+end_src
+
+** Doom Theme
+#+begin_src emacs-lisp
+;; Themes and icons
+(use-package doom-themes
+  :straight t
+  :config
+  (load-theme 'doom-one t)
+  (doom-themes-org-config))
+
+;; icons
+(use-package all-the-icons
+  :straight t)
+
+;; Cool mode line
+(use-package doom-modeline
+  :straight t
+  :config
+  (doom-modeline-mode 1))
+#+end_src
+
+** Startup dashboard
+#+begin_src emacs-lisp
+(use-package dashboard
+  :straight t
+  :config
+  (dashboard-setup-startup-hook)
+  (setq dashboard-banner-logo-title "Welcome back, mkapra@."
+        dashboard-center-content t
+        dashboard-startup-banner 'logo
+        dashboard-items '((recents . 5)
+                          (agenda . 5)))
+  (set-face-attribute 'dashboard-banner-logo-title nil :weight 'bold :height 1.5 :inherit 'default))
+#+end_src
+
+** Remove all the ugly bars
+#+begin_src emacs-lisp
+(menu-bar-mode -1)
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
+#+end_src
+
+** Treemacs project file bar
+#+begin_src emacs-lisp
+(use-package treemacs
+  :straight t
+  :defer t
+  :config
+  (setq treemacs-follow-after-init t
+        treemacs-persist-file (expand-file-name ".cache/treemacs-persist" user-emacs-directory)
+        treemacs-width 40
+        treemacs-project-follow-cleanup t
+        treemacs-tag-follow-cleanup t
+        treemacs-expand-after-init nil
+        treemacs-recenter-after-file-follow t
+        treemacs-recenter-after-tag-follow t
+        treemacs-tag-follow-delay 1)
+  (treemacs-follow-mode t)
+  :bind
+  (:map global-map
+        ("C-x t t" . treemacs)))
+#+end_src
+
+** Relative line numbers
+#+begin_src emacs-lisp
+(setq-default display-line-numbers 'visual
+              display-line-numbers-widen t
+              ;; this is the default
+              display-line-numbers-current-absolute t)
+
+(defun noct:relative ()
+  (setq-local display-line-numbers 'visual))
+
+(defun noct:absolute ()
+  (setq-local display-line-numbers t))
+
+(add-hook 'evil-insert-state-entry-hook #'noct:absolute)
+(add-hook 'evil-insert-state-exit-hook #'noct:relative)
+#+end_src
+
+** Highlight TODO
+Hightlight all words like TODO, XXX, FIXME
+
+#+begin_src emacs-lisp
+(use-package hl-todo
+  :straight t
+  :hook
+  (prog-mode . hl-todo-mode)
+  :config
+  (defface hl-todo-TODO
+    '((t :background "#cc241d" :foreground "#f2e5bc" :inherit (hl-todo)))
+    "TODO Face")
+  (setq hl-todo-highlight-punctuation ":"
+        hl-todo-color-background t
+        hl-todo-keyword-faces '(("TODO"  . hl-todo-TODO)
+                                ("XXX"   . hl-todo-TODO)
+                                ("FIXME" . hl-todo-TODO))))
+#+end_src
+
+** Indentation
+Set indentation based on the current indentation of the file
+#+begin_src emacs-lisp
+;; Heuristic indentation
+(use-package dtrt-indent
+  :straight t
+  :hook
+  (prog-mode . dtrt-indent-mode)
+  (text-mode . dtrt-indent-mode)
+  (org-mode . dtrt-indent-mode)
+  (markdown-mode . dtrt-indent-mode))
+#+end_src
+
+** Automatic Parens
+#+begin_src emacs-lisp
+(use-package electric-pair
+  :config
+  (setq electric-pair-open-newline-between-pairs nil)
+  :hook
+  (prog-mode . electric-pair-mode)
+  (text-mode . electric-pair-mode)
+  (org-mode . electric-pair-mode)
+  (markdown-mode . electric-pair-mode))
+#+end_src
+
+** Prettify symbols
+Replaces specified text snippets with a symbol (e.g. lambda)
+#+begin_src emacs-lisp
+(global-prettify-symbols-mode 1)
+#+end_src
+
+* Org Mode
+** General Settings
+#+begin_src emacs-lisp
+(use-package org
+  :straight t
+  :config
+  (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.5)
+        org-image-actual-width nil
+        org-agenda-files (quote ("~/org"))
+        org-directory "~/org"
+        org-latex-listings 'minted
+        org-latex-packages-alist '(("" "minted"))
+        org-latex-pdf-process
+        '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+          "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+          "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
+  (org-babel-do-load-languages 'org-babel-load-languages '((python . t)
+                                                           (shell . t)
+                                                           (C . t)
+                                                           (ruby . t)
+                                                           (dot . t)))
+  (setq org-todo-keywords '((sequence "TODO" "PROGRESS" "REVIEW" "|" "DONE"))
+	org-log-done 'time
+	org-capture-templates
+	(quote (("r" "test" entry (file "~/org/test.org") "* TODO %?\n")))
+        org-edit-src-content-indentation 0)
+  :hook
+  (org-mode . (lambda () (electric-indent-local-mode -1)))
+  (org-mode . org-indent-mode)) ;; virtual spaces
+#+end_src
+
+** Bullets
+Replace the asterisk with bullets
+
+#+begin_src emacs-lisp
+;; fancy bullets for org
+(use-package org-bullets
+  :straight t
+  :after org
+  :hook
+  (org-mode . org-bullets-mode)
+  :custom
+  (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
+#+end_src
+
+** Snippets
+#+begin_src emacs-lisp
+;; Snippets
+(use-package yasnippet
+  :straight t
+  :init
+  :bind (:map yas-minor-mode-map
+              ("C-o" . yas-expand))
+  :hook (org-mode . yas-minor-mode))
+
+(use-package yasnippet-snippets
+  :straight (yasnippet-snippets :type git :host github :repo "AndreaCrotti/yasnippet-snippets")
+  :after yasnippet)
+#+end_src
+
+** Commenting for a single line
+#+begin_src emacs-lisp
+(defun toggle-comment-on-line ()
+  "comment or uncomment current line"
+  (interactive)
+  (comment-or-uncomment-region (line-beginning-position) (line-end-position)))
+
+(global-set-key [(control ?c) (control ?\/)] 'toggle-comment-on-line)
+#+end_src
+
+* Language settings
+** Code Folding
+#+begin_src emacs-lisp
+;; Fold for code
+(use-package yafolding
+  :straight t
+  :hook (ruby-mode . yafolding-mode))
+#+end_src
+
+** Ruby
+#+begin_src emacs-lisp
+;; Run ruby code
+(use-package inf-ruby
+  :straight t)
+#+end_src
+
+* Local configuration
+If there is a local configuration file: source it
+#+begin_src emacs-lisp
+(when (file-exists-p "~/.emacs.d/local.el")
+  (message "Loading ~/.emacs.d/local.el")
+  (load-file "~/.emacs.d/local.el"))
+#+end_src
