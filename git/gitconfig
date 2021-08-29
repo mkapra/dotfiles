@@ -1,3 +1,4 @@
+# ~/.gitconfig
 
 [core]
     editor = vim
