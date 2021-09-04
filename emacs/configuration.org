@@ -1,27 +1,6 @@
-# ~/.emacs.d/configuration.org
-
-#+TITLE: Emacs Configuration
+#+TITLE:Emacs Configuration
 #+AUTHOR: Maximilian Kapra
 #+OPTIONS: toc:nil num:nil
-
-* Variables
-#+begin_src emacs-lisp
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(auto-dark-emacs/dark-theme 'doom-one)
- '(auto-dark-emacs/light-theme 'doom-solarized-light)
- '(custom-safe-themes
-   '("4f1d2476c290eaa5d9ab9d13b60f2c0f1c8fa7703596fa91b235db7f99a9441b" default))
- '(onrg-file-apps
-   '(("\\.pdf\\'" . "open %s")
-     (auto-mode . emacs)
-     (directory . emacs)
-     ("\\.mm\\'" . default)
-     ("\\.x?html?\\'" . default))))
-#+end_src
 
 #+begin_src emacs-lisp
 (setq make-backup-files nil
@@ -31,9 +10,6 @@
       tramp-default-method "ssh"
       initial-major-mode 'fundamental-mode
       initial-scratch-message nil
-      org-image-actual-width nil
-      org-hide-emphasis-markers t
-      calendar-week-start-day 1
       fast-but-imprecise-scrolling t)
 #+end_src
 
@@ -42,7 +18,8 @@
 #+begin_src emacs-lisp
 (setq gc-cons-threshold most-positive-fixnum) ; 2^61 bytes
 #+end_src
-Lower the gc threshold again afterwards
+
+- Lower the gc threshold again afterwards
 #+begin_src emacs-lisp
 (add-hook 'emacs-startup-hook
   (lambda ()
@@ -55,23 +32,15 @@ Lower the gc threshold again afterwards
 #+end_src
 
 - Disable bidirectional text scanning for a modest performance boost. I've set
-this to `nil' in the past, but the `bidi-display-reordering's docs say that
-is an undefined state and suggest this to be just as good:
+  this to `nil' in the past, but the `bidi-display-reordering's docs say that
+  is an undefined state and suggest this to be just as good:
 #+begin_src emacs-lisp
 (setq-default bidi-display-reordering 'left-to-right
               bidi-paragraph-direction 'left-to-right)
 #+end_src
 
-- Disabling the BPA makes redisplay faster, but might produce incorrect display
-reordering of bidirectional text with embedded parentheses and other bracket
-characters whose 'paired-bracket' Unicode property is non-nil.
-This is a Emacs 27 only!
-#+begin_src emacs-lisp
-(setq bidi-inhibit-bpa t)
-#+end_src
-
 - Reduce rendering/line scan work for Emacs by not rendering cursors or regions
-in non-focused windows.
+  in non-focused windows.
 #+begin_src emacs-lisp
 (setq-default cursor-in-non-selected-windows nil)
 (setq highlight-nonselected-windows nil)
@@ -84,7 +53,7 @@ The default is 0.5 for this setting.
 #+end_src
 
 - Introduced in Emacs HEAD (b2f8c9f), this inhibits fontification while
-receiving input, which should help a little with scrolling performance.
+  receiving input, which should help a little with scrolling performance.
 #+begin_src emacs-lisp
 (setq redisplay-skip-fontification-on-input t)
 #+end_src
@@ -111,6 +80,13 @@ receiving input, which should help a little with scrolling performance.
 #+end_src
 
 * Appearance
+** Remove all the ugly bars
+#+begin_src emacs-lisp
+(menu-bar-mode -1)
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
+#+end_src
+
 ** Show Trailing Whitespaces and tabs
 #+begin_src emacs-lisp
 (global-whitespace-mode t)
@@ -118,23 +94,28 @@ receiving input, which should help a little with scrolling performance.
 #+end_src
 
 ** Doom Theme
+First install the themes:
 #+begin_src emacs-lisp
-;; Themes and icons
 (use-package doom-themes
   :straight t
   :config
   (load-theme 'doom-one t)
   (doom-themes-org-config))
+#+end_src
 
-;; icons
+Then install the icons:
+#+begin_src emacs-lisp
 (use-package all-the-icons
   :straight t)
+#+end_src
 
-;; Cool mode line
+The last step is to install the modeline:
+#+begin_src emacs-lisp
 (use-package doom-modeline
   :straight t
   :config
-  (doom-modeline-mode 1))
+  (doom-modeline-mode 1)
+  (setq doom-modeline-indent-info t))
 #+end_src
 
 ** Startup dashboard
@@ -143,22 +124,18 @@ receiving input, which should help a little with scrolling performance.
   :straight t
   :config
   (dashboard-setup-startup-hook)
-  (setq dashboard-banner-logo-title "Welcome back, mkapra@."
-        dashboard-center-content t
-        dashboard-startup-banner 'logo
-        dashboard-items '((recents . 5)
-                          (agenda . 5)))
-  (set-face-attribute 'dashboard-banner-logo-title nil :weight 'bold :height 1.5 :inherit 'default))
-#+end_src
-
-** Remove all the ugly bars
-#+begin_src emacs-lisp
-(menu-bar-mode -1)
-(tool-bar-mode -1)
-(scroll-bar-mode -1)
+  (setq
+    dashboard-startup-banner 'logo
+    dashboard-center-content t
+    dashboard-filter-agenda-entry 'dashboard-no-filter-agenda
+    dashboard-banner-logo-title "Welcome back, mkapra@."
+    dashboard-items '((recents . 5)
+                      (agenda . 20))))
 #+end_src
 
 ** Treemacs project file bar
+Treemacs is a nice file bar. It is opened at startup.
+
 #+begin_src emacs-lisp
 (use-package treemacs
   :straight t
@@ -177,23 +154,17 @@ receiving input, which should help a little with scrolling performance.
   :bind
   (:map global-map
         ("C-x t t" . treemacs)))
+
+(add-hook 'window-setup-hook #'treemacs 'append) ;; Open treemacs at startups
 #+end_src
 
 ** Relative line numbers
 #+begin_src emacs-lisp
-(setq-default display-line-numbers 'visual
+(setq-default display-line-numbers 'relative
               display-line-numbers-widen t
-              ;; this is the default
               display-line-numbers-current-absolute t)
 
-(defun noct:relative ()
-  (setq-local display-line-numbers 'visual))
-
-(defun noct:absolute ()
-  (setq-local display-line-numbers t))
-
-(add-hook 'evil-insert-state-entry-hook #'noct:absolute)
-(add-hook 'evil-insert-state-exit-hook #'noct:relative)
+(global-visual-line-mode t)
 #+end_src
 
 ** Highlight TODO
@@ -216,9 +187,9 @@ Hightlight all words like TODO, XXX, FIXME
 #+end_src
 
 ** Indentation
-Set indentation based on the current indentation of the file
+Set indentation based on the current indentation of the file.
+
 #+begin_src emacs-lisp
-;; Heuristic indentation
 (use-package dtrt-indent
   :straight t
   :hook
@@ -228,7 +199,151 @@ Set indentation based on the current indentation of the file
   (markdown-mode . dtrt-indent-mode))
 #+end_src
 
-** Automatic Parens
+** Prettify symbols
+Replaces specified text snippets with a symbol (e.g. lambda).
+
+#+begin_src emacs-lisp
+(global-prettify-symbols-mode 1)
+#+end_src
+
+** 80 char limit line in prog mode
+#+begin_src emacs-lisp
+(use-package fill-column-indicator
+  :straight t
+  :defer 1
+  :diminish
+  (fci-mode)
+  :config
+  (setq fci-rule-width 1
+        fci-rule-color "#cc241d")
+  :hook
+  (prog-mode . fci-mode)
+  (markdown-mode . fci-mode))
+#+end_src
+
+** Nyan
+#+begin_src emacs-lisp
+(use-package nyan-mode
+  :straight t
+  :init
+  (nyan-mode)
+  (nyan-start-animation)
+  (nyan-toggle-wavy-trail)
+  :config
+  (setq nyan-cat-face-number 4))
+#+end_src
+
+* Completion
+Company for code completion
+#+begin_src emacs-lisp
+(use-package company
+  :straight t
+  :hook
+  ;; (lsp-mode . company-mode)
+  (prog-mode . company-mode)
+  (LaTeX-mode . company-mode)
+  (org-mode . company-mode)
+  :custom
+  (company-minimum-prefix-length 3)
+  (company-idle-delay 0.5)
+  :bind (:map company-active-map
+              ("C-j" . company-select-next-or-abort) ;; down
+              ("C-k" . company-select-previous-or-abort) ;; up
+              ("C-l" . company-complete-selection))) ;; right, as in complete towards the right
+#+end_src
+
+Frontend for company
+#+begin_src emacs-lisp
+(use-package company-box
+  :straight t
+  :config
+  (setq company-box-doc-delay 2.0
+        company-box-max-candidates 10)
+  :hook
+  (company-mode . company-box-mode))
+#+end_src
+
+Snippet Support for company
+#+begin_src emacs-lisp
+(defun company-mode/backend-with-yas (backend)
+  (if (and (listp backend) (member 'company-yasnippet backend))
+      backend
+    (append (if (consp backend) backend (list backend))
+            '(:with company-yasnippet))))
+
+(defun company-mode/add-yasnippet ()
+  (setq company-backends (mapcar #'company-mode/backend-with-yas company-backends)))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package ivy
+  :straight t
+  :diminish
+  :bind (("C-s" . swiper) ; TODO: possibly map this to / at some point?
+         :map ivy-minibuffer-map
+         ("TAB" . ivy-alt-done)
+         ("C-l" . ivy-alt-done)
+         ("C-j" . ivy-next-line)
+         ("C-k" . ivy-previous-line)
+         :map ivy-switch-buffer-map
+         ("C-k" . ivy-previous-line)
+         ("C-l" . ivy-done)
+         ("C-d" . ivy-switch-buffer-kill)
+         :map ivy-reverse-i-search-map
+         ("C-k" . ivy-previous-line)
+         ("C-d" . ivy-reverse-i-search-kill))
+  :config
+    (ivy-mode 1))
+
+(use-package counsel
+  :straight t
+  :bind (("M-x" . counsel-M-x)
+         ("C-x b" . counsel-ibuffer)
+         ("C-x C-f" . counsel-find-file)
+         :map minibuffer-local-map
+         ("C-r" . 'counsel-minibuffer-history)))
+#+end_src
+* Language settings
+** Colord brackets
+#+begin_src emacs-lisp
+(use-package rainbow-mode
+  :straight t
+  :hook
+  (prog-mode . rainbow-mode))
+#+end_src
+
+** Snippets
+Snippets are useful to save time from typing.
+
+First install the general snippet plugin:
+#+begin_src emacs-lisp
+(use-package yasnippet
+  :straight t
+  :init
+  :bind (:map yas-minor-mode-map
+              ("C-o" . yas-expand))
+  :hook
+  (company-mode . yas-minor-mode)
+  (company-mode . company-mode/add-yasnippet))
+#+end_src
+
+Now install the snippets:
+#+begin_src emacs-lisp
+(use-package yasnippet-snippets
+  :straight (yasnippet-snippets :type git :host github :repo "AndreaCrotti/yasnippet-snippets"
+                                :fork (:host github
+                                             :repo "crammk/yasnippet-snippets"))
+  :after yasnippet)
+#+end_src
+
+** Parenthesse
+Show matching parentheses:
+#+begin_src emacs-lisp
+(show-paren-mode t)
+(setq show-paren-style 'parenthesis)
+#+end_src
+
+Automatic parentheses:
 #+begin_src emacs-lisp
 (use-package electric-pair
   :config
@@ -239,73 +354,6 @@ Set indentation based on the current indentation of the file
   (org-mode . electric-pair-mode)
   (markdown-mode . electric-pair-mode))
 #+end_src
-
-** Prettify symbols
-Replaces specified text snippets with a symbol (e.g. lambda)
-#+begin_src emacs-lisp
-(global-prettify-symbols-mode 1)
-#+end_src
-
-* Org Mode
-** General Settings
-#+begin_src emacs-lisp
-(use-package org
-  :straight t
-  :config
-  (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.5)
-        org-image-actual-width nil
-        org-agenda-files (quote ("~/org"))
-        org-directory "~/org"
-        org-latex-listings 'minted
-        org-latex-packages-alist '(("" "minted"))
-        org-latex-pdf-process
-        '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
-          "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
-          "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
-  (org-babel-do-load-languages 'org-babel-load-languages '((python . t)
-                                                           (shell . t)
-                                                           (C . t)
-                                                           (ruby . t)
-                                                           (dot . t)))
-  (setq org-todo-keywords '((sequence "TODO" "PROGRESS" "REVIEW" "|" "DONE"))
-	org-log-done 'time
-	org-capture-templates
-	(quote (("r" "test" entry (file "~/org/test.org") "* TODO %?\n")))
-        org-edit-src-content-indentation 0)
-  :hook
-  (org-mode . (lambda () (electric-indent-local-mode -1)))
-  (org-mode . org-indent-mode)) ;; virtual spaces
-#+end_src
-
-** Bullets
-Replace the asterisk with bullets
-
-#+begin_src emacs-lisp
-;; fancy bullets for org
-(use-package org-bullets
-  :straight t
-  :after org
-  :hook
-  (org-mode . org-bullets-mode)
-  :custom
-  (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
-#+end_src
-
-** Snippets
-#+begin_src emacs-lisp
-;; Snippets
-(use-package yasnippet
-  :straight t
-  :init
-  :bind (:map yas-minor-mode-map
-              ("C-o" . yas-expand))
-  :hook (org-mode . yas-minor-mode))
-
-(use-package yasnippet-snippets
-  :straight (yasnippet-snippets :type git :host github :repo "AndreaCrotti/yasnippet-snippets")
-  :after yasnippet)
-#+end_src
-
 ** Commenting for a single line
 #+begin_src emacs-lisp
 (defun toggle-comment-on-line ()
@@ -316,10 +364,8 @@ Replace the asterisk with bullets
 (global-set-key [(control ?c) (control ?\/)] 'toggle-comment-on-line)
 #+end_src
 
-* Language settings
 ** Code Folding
 #+begin_src emacs-lisp
-;; Fold for code
 (use-package yafolding
   :straight t
   :hook (ruby-mode . yafolding-mode))
@@ -327,15 +373,131 @@ Replace the asterisk with bullets
 
 ** Ruby
 #+begin_src emacs-lisp
-;; Run ruby code
 (use-package inf-ruby
   :straight t)
 #+end_src
 
+** LaTeX
+The org-exporter translates bold font to an alert-block in latex.
+I want the old behaviour back:
+#+begin_src emacs-lisp
+(defun mkp/beamer-bold (contents backend info)
+  (when (eq backend 'beamer)
+    (replace-regexp-in-string "\\`\\\\[A-Za-z0-9]+" "\\\\textbf" contents)))
+
+(use-package ox
+  :after org
+  :config
+  (add-to-list 'org-export-filter-bold-functions 'mkp/beamer-bold))
+#+end_src
+
+* Magit - Git Client
+#+begin_src emacs-lisp
+(use-package magit
+  :straight t)
+
+(use-package treemacs-magit
+  :after (treemacs magit)
+  :straight t)
+#+end_src
+
+* Org Mode
+** General Settings
+~set-face-attribute (org-document-title)~: Set the font of the title of a org document
+
+#+begin_src emacs-lisp
+(use-package org
+  :straight t
+  :hook
+  (org-mode . (lambda () (electric-indent-local-mode -1)))
+  (org-mode . org-indent-mode) ;; virtual spaces
+  :config
+  (set-face-attribute 'org-document-title nil :weight 'bold :inherit 'default :height 200)
+  (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.5)
+        org-todo-keywords '((sequence "TODO" "PROGRESS" "REVIEW" "|" "DONE"))
+        ord-log-done 'time
+        org-catpure-templates
+          (quote (("r" "test" entry (file "~/org/test.org") "* TODO %?\n")))
+        org-edit-src-content-indentation 0
+        org-hidden-keywords '(title)       ;; Do not show the keyword of the title
+        org-image-actual-width nil         ;; Do not show images in real width inline
+        org-ellipsis " ⏋"                   ;; Sign for folded sections
+        org-hide-emphasis-markers t        ;; Hide e.g. **
+        org-agenda-files (quote ("~/org")) ;; Where the agenda files are located
+        org-directory "~/org"              ;; Where all centralorg files are placed
+        org-startup-folded t               ;; Start all as folded
+        org-latex-listings 'minted         ;; Minted for code listings in latex
+        org-latex-packages-alist '(("" "minted"))
+        org-latex-pdf-process
+        '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+          "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+          "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
+  (org-babel-do-load-languages 'org-babel-load-languages '((python . t)
+                                                           (shell . t)
+                                                           (C . t)
+                                                           (ruby . t)
+                                                           (dot . t)))
+)
+#+end_src
+** Exporting
+*** Export with bootstrap
+#+begin_src emacs-lisp
+(use-package ox-twbs
+  :straight t)
+#+end_src
+
+*** Enable with markdown
+#+begin_src emacs-lisp
+(eval-after-load "org"
+  '(require 'ox-md nil t))
+#+end_src
+
+** Bullets
+Replace the asterisks with bullets.
+This package is also able to set the font size of each title in org-mode. I do not want to use this feature.
+
+#+begin_src emacs-lisp
+(use-package org-superstar
+  :straight t
+  :after org
+  :hook
+  (org-mode . org-superstar-mode)
+  :config
+  (org-superstar-configure-like-org-bullets)
+  ;; uncomment if slowdown happens
+  ;;(setq inhibit-compacting-font-caches t)
+  ;; Low levels are unimportant => no scaling
+  (set-face-attribute 'org-level-7 nil :inherit 'org-level-8)
+  (set-face-attribute 'org-level-6 nil :inherit 'org-level-8)
+  (set-face-attribute 'org-level-5 nil :inherit 'org-level-8)
+  (set-face-attribute 'org-level-4 nil :inherit 'org-level-8))
+#+end_src
+
+** Reload org mode
+To fix error message of org timer: https://github.com/seagle0128/.emacs.d/issues/129
+
+#+begin_src emacs-lisp
+;; (org-reload)
+#+end_src
+
+* Environment
+Copy all environment variables into emacs
+
+#+begin_src emacs-lisp
+;; Copy environment
+(use-package exec-path-from-shell
+  :straight t
+  :config
+  (setq exec-path-from-shell-arguments '("-l"))
+  (exec-path-from-shell-copy-envs '("PATH" "SSH_AGENT_PID" "SSH_AUTH_SOCK")))
+#+end_src
+
 * Local configuration
-If there is a local configuration file: source it
+Source a local file if it exists
+
 #+begin_src emacs-lisp
 (when (file-exists-p "~/.emacs.d/local.el")
   (message "Loading ~/.emacs.d/local.el")
   (load-file "~/.emacs.d/local.el"))
 #+end_src
+

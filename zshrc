@@ -87,7 +87,7 @@ setopt share_history
 zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} l:|=* r:|=*' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} l:|=* r:|=*' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} l:|=* r:|=*' menu select=2
 
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#ADD8E6,underline"
-source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+# source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 ##############################################################################
 # Keybindings
