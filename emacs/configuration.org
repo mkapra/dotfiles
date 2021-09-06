@@ -1,3 +1,4 @@
+# ~/.emacs.d/configuration.org
 #+TITLE:Emacs Configuration
 #+AUTHOR: Maximilian Kapra
 #+OPTIONS: toc:nil num:nil
@@ -233,76 +234,18 @@ Replaces specified text snippets with a symbol (e.g. lambda).
   (setq nyan-cat-face-number 4))
 #+end_src
 
-* Completion
-Company for code completion
+** Show available keybindings while typing
 #+begin_src emacs-lisp
-(use-package company
+(use-package which-key
   :straight t
-  :hook
-  ;; (lsp-mode . company-mode)
-  (prog-mode . company-mode)
-  (LaTeX-mode . company-mode)
-  (org-mode . company-mode)
-  :custom
-  (company-minimum-prefix-length 3)
-  (company-idle-delay 0.5)
-  :bind (:map company-active-map
-              ("C-j" . company-select-next-or-abort) ;; down
-              ("C-k" . company-select-previous-or-abort) ;; up
-              ("C-l" . company-complete-selection))) ;; right, as in complete towards the right
-#+end_src
-
-Frontend for company
-#+begin_src emacs-lisp
-(use-package company-box
-  :straight t
-  :config
-  (setq company-box-doc-delay 2.0
-        company-box-max-candidates 10)
-  :hook
-  (company-mode . company-box-mode))
-#+end_src
-
-Snippet Support for company
-#+begin_src emacs-lisp
-(defun company-mode/backend-with-yas (backend)
-  (if (and (listp backend) (member 'company-yasnippet backend))
-      backend
-    (append (if (consp backend) backend (list backend))
-            '(:with company-yasnippet))))
-
-(defun company-mode/add-yasnippet ()
-  (setq company-backends (mapcar #'company-mode/backend-with-yas company-backends)))
-#+end_src
-
-#+begin_src emacs-lisp
-(use-package ivy
-  :straight t
+  :init
+  (which-key-mode)
   :diminish
-  :bind (("C-s" . swiper) ; TODO: possibly map this to / at some point?
-         :map ivy-minibuffer-map
-         ("TAB" . ivy-alt-done)
-         ("C-l" . ivy-alt-done)
-         ("C-j" . ivy-next-line)
-         ("C-k" . ivy-previous-line)
-         :map ivy-switch-buffer-map
-         ("C-k" . ivy-previous-line)
-         ("C-l" . ivy-done)
-         ("C-d" . ivy-switch-buffer-kill)
-         :map ivy-reverse-i-search-map
-         ("C-k" . ivy-previous-line)
-         ("C-d" . ivy-reverse-i-search-kill))
+  (which-key-mode)
   :config
-    (ivy-mode 1))
-
-(use-package counsel
-  :straight t
-  :bind (("M-x" . counsel-M-x)
-         ("C-x b" . counsel-ibuffer)
-         ("C-x C-f" . counsel-find-file)
-         :map minibuffer-local-map
-         ("C-r" . 'counsel-minibuffer-history)))
+  (setq which-key-idle-delay 1))
 #+end_src
+
 * Language settings
 ** Colord brackets
 #+begin_src emacs-lisp
@@ -310,30 +253,6 @@ Snippet Support for company
   :straight t
   :hook
   (prog-mode . rainbow-mode))
-#+end_src
-
-** Snippets
-Snippets are useful to save time from typing.
-
-First install the general snippet plugin:
-#+begin_src emacs-lisp
-(use-package yasnippet
-  :straight t
-  :init
-  :bind (:map yas-minor-mode-map
-              ("C-o" . yas-expand))
-  :hook
-  (company-mode . yas-minor-mode)
-  (company-mode . company-mode/add-yasnippet))
-#+end_src
-
-Now install the snippets:
-#+begin_src emacs-lisp
-(use-package yasnippet-snippets
-  :straight (yasnippet-snippets :type git :host github :repo "AndreaCrotti/yasnippet-snippets"
-                                :fork (:host github
-                                             :repo "crammk/yasnippet-snippets"))
-  :after yasnippet)
 #+end_src
 
 ** Parenthesse
@@ -371,10 +290,94 @@ Automatic parentheses:
   :hook (ruby-mode . yafolding-mode))
 #+end_src
 
+** LSP
+#+begin_src emacs-lisp
+(use-package lsp-mode
+  :straight t
+  :commands (lsp lsp-deferred)
+  :init
+  (setq lsp-keymap-prefix "C-l")
+  :config
+  (lsp-enable-which-key-integration t)
+  (setq lsp-rust-server 'rust-analyzer
+        lsp-auto-guess-root t
+        lsp-idle-delay 0.2
+        lsp-enable-file-watchers nil)
+  ;; (with-eval-after-load "lsp-rust"
+  ;;   (lsp-register-client
+  ;;    (make-lsp-clientp
+  ;;     :new-connection (lsp-tramp-connection "rust-analyzer")
+  ;;     :remote? t
+  ;;     :major-modes '(rust-mode rustic-mode)
+  ;;     :initialization-options 'lsp-rust-analyzer--make-init-options
+  ;;     :notification-handlers (ht<-alist lsp-rust-notification-handlers)
+  ;;     :action-handlers (ht ("rust-analyzer.runSingle" #'lsp-rust--analyzer-run-single))
+  ;;     :library-folders-fn (lambda (_workspace) lsp-rust-library-directories)
+  ;;     :after-open-fn (lambda ()
+  ;;                      (when lsp-rust-analyzer-server-display-inlay-hints
+  ;;                        (lsp-rust-analyzer-inlay-hints-mode)))
+  ;;     :ignore-messages nil
+  ;;     :server-id 'rust-analyzer-remote)))
+  :hook
+  (rust-mode . lsp)
+  (python-mode . lsp))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package lsp-ivy
+  :straight t
+  :after lsp-mode
+  :bind(:map lsp-mode-map ("C-l g a" . lsp-ivy-workspace-symbol)))
+#+end_src
+
+Error messages on the fly
+#+begin_src emacs-lisp
+(use-package flycheck
+  :straight t
+  :after lsp)
+#+end_src
+** Snippets
+Snippets are useful to save time from typing.
+
+First install the general snippet plugin:
+#+begin_src emacs-lisp
+(use-package yasnippet
+  :straight t
+  :init
+  :bind (:map yas-minor-mode-map
+              ("C-o" . yas-expand))
+  :hook
+  (company-mode . yas-minor-mode)
+  (company-mode . company-mode/add-yasnippet))
+#+end_src
+
+Now install the snippets:
+#+begin_src emacs-lisp
+(use-package yasnippet-snippets
+  :straight (yasnippet-snippets :type git :host github :repo "AndreaCrotti/yasnippet-snippets"
+                                :fork (:host github
+                                             :repo "crammk/yasnippet-snippets"))
+  :after yasnippet)
+#+end_src
+
 ** Ruby
 #+begin_src emacs-lisp
 (use-package inf-ruby
   :straight t)
+#+end_src
+
+** Rust
+#+begin_src emacs-lisp
+(use-package rust-mode
+  :straight t
+  :hook
+  (rust-mode . prettify-symbols-mode)
+  (rust-mode . (lambda ()
+                 (push '("->" . ?→) prettify-symbols-alist)
+                 (push '("=>" . ?⇒) prettify-symbols-alist)
+                 (push '("!=" . ?≠) prettify-symbols-alist)
+                 (push '("<=" . ?≤) prettify-symbols-alist)
+                 (push '(">=" . ?≥) prettify-symbols-alist))))
 #+end_src
 
 ** LaTeX
@@ -391,6 +394,70 @@ I want the old behaviour back:
   (add-to-list 'org-export-filter-bold-functions 'mkp/beamer-bold))
 #+end_src
 
+* Completion
+Company for code completion
+#+begin_src emacs-lisp
+(use-package company
+  :straight t
+  :hook
+  (lsp-mode . company-mode)
+  (prog-mode . company-mode)
+  (LaTeX-mode . company-mode)
+  (org-mode . company-mode)
+  :custom
+  (company-minimum-prefix-length 2)
+  (company-idle-delay 0.1))
+  ;; :bind (:map company-active-map
+  ;;             ("C-j" . company-select-next-or-abort) ;; down
+  ;;             ("C-k" . company-select-previous-or-abort) ;; up
+  ;;             ("C-l" . company-complete-selection))) ;; right, as in complete towards the right
+#+end_src
+
+Frontend for company
+#+begin_src emacs-lisp
+(use-package company-box
+  :straight t
+  :config
+  (setq company-box-doc-delay 2.0
+        company-box-max-candidates 10)
+  :hook
+  (company-mode . company-box-mode))
+#+end_src
+
+Snippet Support for company
+#+begin_src emacs-lisp
+(defun company-mode/backend-with-yas (backend)
+  (if (and (listp backend) (member 'company-yasnippet backend))
+      backend
+    (append (if (consp backend) backend (list backend))
+            '(:with company-yasnippet))))
+
+(defun company-mode/add-yasnippet ()
+  (setq company-backends (mapcar #'company-mode/backend-with-yas company-backends)))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package ivy
+  :straight t
+  :diminish
+  :bind (("C-s" . swiper) ; TODO: possibly map this to / at some point?
+         :map ivy-minibuffer-map
+         ("TAB" . ivy-alt-done)
+         :map ivy-switch-buffer-map
+         ("C-d" . ivy-switch-buffer-kill)
+         :map ivy-reverse-i-search-map
+         ("C-d" . ivy-reverse-i-search-kill))
+  :config
+    (ivy-mode 1))
+
+(use-package counsel
+  :straight t
+  :bind (("M-x" . counsel-M-x)
+         ("C-x b" . counsel-ibuffer)
+         ("C-x C-f" . counsel-find-file)
+         :map minibuffer-local-map
+         ("C-r" . 'counsel-minibuffer-history)))
+#+end_src
 * Magit - Git Client
 #+begin_src emacs-lisp
 (use-package magit
