@@ -1,0 +1,48 @@
+[user]
+	name	= Maximilian Kapra
+	email	= maximilian@kapra.de
+
+[alias]
+	a	= add
+	find	= !git ls-files "*"/"$1"
+	co	= checkout
+	cob	= checkout -b
+	c	= commit -v
+	ca	= commit -v --amend
+	d	= diff
+	l	= log
+	g	= grep
+	ds	= diff --staged
+	fo	= fetch origin
+	rom	= !git rebase $(git rev-parse --abbrev-ref --symbolic-full-name @{u})
+	romi	= !git rebase -i $(git rev-parse --abbrev-ref --symbolic-full-name @{u})
+	rc	= rebase --continue
+	ra	= rebase --abort
+	s	= status
+	sp	= stash pop
+	pullall	= "!f(){ git pull \"$@\" && git submodule update --init --recursive; }; f"
+	nuke	= "!f() { git clean -dfxf; git reset HEAD --hard; }; f"
+
+[color]
+  diff = auto
+  status = auto
+  branch = auto
+  interactive = auto
+  ui = true
+  pager = true
+
+[core]
+	pager	= less -+$LESS -R
+	editor	= vim
+[commit]
+	template	= ~/.gitmessage
+[ush]
+	default	= simple
+[pager]
+	grep	= false
+	diff	= false
+[diff]
+	colorMoved	= true
+[pull]
+	rebase = false
+^
