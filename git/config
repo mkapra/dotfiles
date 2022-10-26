@@ -45,4 +45,3 @@
 	colorMoved	= true
 [pull]
 	rebase = false
-^
