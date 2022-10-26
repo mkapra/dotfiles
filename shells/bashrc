@@ -20,6 +20,11 @@ HISTFILESIZE=2000
 # update the values of LINES and COLUMNS.
 shopt -s checkwinsize
 
+# ============================== Shortcuts
+# Bind C-f to the fg command to be able to bring a background command to the
+# foreground faster
+bind -x '"\C-f":"fg"'
+
 # ============================== Functions
 parse_git_dir() {
   if $(git rev-parse --git-dir > /dev/null 2>&1)

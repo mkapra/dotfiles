@@ -9,11 +9,6 @@ export LC_ALL=en_US.UTF-8
 export LC_MESSAGES=en_US.UTF-8
 export LANG=en_US.UTF-8
 
-# ============================== Shortcuts
-# Bind C-f to the fg command to be able to bring a background command to the
-# foreground faster
-bind -x '"\C-f":"fg"'
-
 # ============================== Aliases
 alias g='git'
 
@@ -42,3 +37,18 @@ else
   # If this is a tmux session then use the symlinked SSH_AUTH_SOCK
   export SSH_AUTH_SOCK=~/.ssh/ssh_auth_sock
 fi
+
+# ============================== Functions
+# Builds a given latex file with latexmk in a docker container
+tex() {
+  tex_name=$1
+  docker run -v "$(pwd):/latex" --rm ghcr.io/mkapra/latex-docker:latest latexmk $tex_name
+  docker run -v "$(pwd):/latex" --rm ghcr.io/mkapra/latex-docker:latest latexmk -c $tex_name
+}
+
+# Builds a given markdown file with the eisvogel theme in a docker container
+eis() {
+  md_name=$1
+  md_without_ending=$(echo $md_name | cut -d '.' -f 1)
+  docker run --rm -v "$(pwd):/latex" ghcr.io/mkapra/latex-docker:latest pandoc $md_name -o /latex/$md_without_ending.pdf --from markdown --template eisvogel --listings
+}
