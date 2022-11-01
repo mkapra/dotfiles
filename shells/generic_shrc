@@ -8,9 +8,11 @@ fi
 export LC_ALL=en_US.UTF-8
 export LC_MESSAGES=en_US.UTF-8
 export LANG=en_US.UTF-8
+export PATH=$HOME/.local/bin:$PATH
 
 # ============================== Aliases
 alias g='git'
+alias k='kubectl'
 
 # ============================== Colors
 # enable color support of ls and also add handy aliases
