@@ -13,6 +13,10 @@ autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
 
 
 call plug#begin()
+if has ('mac')
+  Plug 'github/copilot.vim'
+endif
+
 if has('vim')
   Plug 'ctrlpvim/ctrlp.vim'               	" file finder
 endif
@@ -33,6 +37,7 @@ if has('nvim')
   Plug 'SmiteshP/nvim-navic'                    " Breadcrumbs
 
   Plug 'kyazdani42/nvim-web-devicons'
+  Plug 'arkav/lualine-lsp-progress'
   Plug 'nvim-lualine/lualine.nvim'
 
   if has('nvim-0.7.0')
@@ -261,13 +266,17 @@ require('lualine').setup({
     theme = 'everforest',
   },
   tabline = {
-    lualine_a = {},
-    lualine_b = {
-      require('nvim-navic').get_location
+    lualine_a = {
+      {
+        'tabs',
+        max_length = vim.o.columns / 3,
+        mode = 2,
+      }
     },
+    lualine_b = {},
     lualine_c = {},
     lualine_x = {
-      'lsp_progress'
+      require('nvim-navic').get_location
     },
     lualine_y = {},
     lualine_z = {}
@@ -369,31 +378,31 @@ lua << EOF
   end
 
   -- Rust (use rust-tools to setup lsp, because it has more features)
-  -- local opts = {
-  --   tools = {
-  --     autoSetHints = true,
-  --     inlay_hints = {
-  --       show_parameter_hints = false,
-  --       parameter_hints_prefix = "",
-  --       other_hints_prefix = "",
-  --     },
-  --   },
-  --   server = { -- these settings go directly to lsp
-  --     on_attach = function(client, bufnr)
-  --       navic.attach(client, bufnr) -- breadcrumbs
-  --     end,
-  --     settings = {
-  --       ["rust-analyzer"] = {
-  --         checkOnSave = {
-  --           command = "clippy"
-  --         },
-  --       }
-  --     }
-  --   },
-  -- }
+  local opts = {
+    tools = {
+      autoSetHints = true,
+      inlay_hints = {
+        show_parameter_hints = false,
+        parameter_hints_prefix = "",
+        other_hints_prefix = "",
+      },
+    },
+    server = { -- these settings go directly to lsp
+      on_attach = function(client, bufnr)
+        navic.attach(client, bufnr) -- breadcrumbs
+      end,
+      settings = {
+        ["rust-analyzer"] = {
+          checkOnSave = {
+            command = "clippy"
+          },
+        }
+      }
+    },
+  }
 
-  -- -- actually setup rust-tools with the opts from above
-  -- require('rust-tools').setup(opts)
+  -- actually setup rust-tools with the opts from above
+  require('rust-tools').setup(opts)
 EOF
 endif
 
@@ -441,7 +450,7 @@ if has('nvim')
     local default_opts = { noremap = true, silent = true }
     local wk = require 'which-key'
 
-    map("n", "<leader>nh", "<cmd> noh<CR>", default_opts) -- Reset highlighting
+    map("n", "<leader>h", "<cmd> noh<CR>", default_opts) -- Reset highlighting
     map("n", "<leader>ie", "<cmd> lua require'telescope.builtin'.symbols{ sources = { 'emoji', 'gitmoji' } }<CR>", default_opts) -- Show emojis
     map("n", "<leader>im", "<cmd> lua require'telescope.builtin'.symbols{ sources = { 'julia' } }<CR>", default_opts)            -- Show math symbols
     map("n", "<leader>in", "<cmd> lua require'telescope.builtin'.symbols{ sources = { 'nerd' } }<CR>", default_opts)             -- Show nerd icons

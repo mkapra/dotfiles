@@ -30,9 +30,9 @@ gt_colorscm() {
 
 # ============================== vim
 vim() {
-  ln -fs $SCRIPT/editors/vim $HOME/.vimrc
+  ln -fs $SCRIPT/editors/vimrc $HOME/.vimrc
   mkdir -p $HOME/.config/nvim
-  ln -fs $SCRIPT/editors/vim $HOME/.config/nvim/init.vim
+  ln -fs $SCRIPT/editors/vimrc $HOME/.config/nvim/init.vim
 
   echo "-- Installing vim-plug"
   if which nvim &> /dev/null
