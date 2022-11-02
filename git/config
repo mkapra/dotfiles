@@ -33,7 +33,6 @@
 
 [core]
 	pager	= less -+$LESS -R
-	editor	= nvim
 [commit]
 	template	= ~/.gitmessage
 [ush]
