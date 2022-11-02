@@ -1,5 +1,12 @@
 # mkapra's dotfiles
 
+## Installation
+
+```
+git clone https://github.com/mkapra/dotfiles.git .dotfiles
+./.dotfiles/setup.sh
+```
+
 ## (n)vim
 
 My (n)vim configuration file works for both editors. This makes it possible
