@@ -1,6 +1,6 @@
 # mkapra's dotfiles
 
-## Installation
+## Installation
 
 ```
 git clone https://github.com/mkapra/dotfiles.git .dotfiles
