@@ -5,7 +5,9 @@ SCRIPT=$(dirname -- "$( readlink -f -- "$0"; )";)
 # ============================== Fonts
 fonts() {
   echo "-- Installing required fonts"
-  if uname -a | grep Linux
+  # Install fonts on local machines only. The simplest way to do this is
+  # checking for a gnome-terminal application
+  if which gnome-terminal &> /dev/null
   then
     mkdir -p $HOME/.local/share/fonts
     ln -fs $SCRIPT/submodules/sfmono-font/SF* $HOME/.local/share/fonts/
