@@ -1,27 +1,27 @@
 [user]
-	name	= Maximilian Kapra
-	email	= maximilian@kapra.de
+  name	= Maximilian Kapra
+  email	= maximilian@kapra.de
 
 [alias]
-	a	= add
-	find	= !git ls-files "*"/"$1"
-	co	= checkout
-	cob	= checkout -b
-	c	= commit -v
-	ca	= commit -v --amend
-	d	= diff
-	l	= log
-	g	= grep
-	ds	= diff --staged
-	fo	= fetch origin
-	rom	= !git rebase $(git rev-parse --abbrev-ref --symbolic-full-name @{u})
-	romi	= !git rebase -i $(git rev-parse --abbrev-ref --symbolic-full-name @{u})
-	rc	= rebase --continue
-	ra	= rebase --abort
-	s	= status
-	sp	= stash pop
-	pullall	= "!f(){ git pull \"$@\" && git submodule update --init --recursive; }; f"
-	nuke	= "!f() { git clean -dfxf; git reset HEAD --hard; }; f"
+  a	= add
+  find	= !git ls-files "*"/"$1"
+  co	= checkout
+  cob	= checkout -b
+  c	= commit -v
+  ca	= commit -v --amend
+  d	= diff
+  l	= log
+  g	= grep
+  ds	= diff --staged
+  fo	= fetch origin
+  rom	= !git rebase $(git rev-parse --abbrev-ref --symbolic-full-name @{u})
+  romi	= !git rebase -i $(git rev-parse --abbrev-ref --symbolic-full-name @{u})
+  rc	= rebase --continue
+  ra	= rebase --abort
+  s	= status
+  sp	= stash pop
+  pullall = "!f(){ git pull \"$@\" && git submodule update --init --recursive; }; f"
+  nuke	= "!f() { git clean -dfxf; git reset HEAD --hard; }; f"
 
 [color]
   diff = auto
@@ -32,15 +32,23 @@
   pager = true
 
 [core]
-	pager	= less -+$LESS -R
+  pager	= less -+$LESS -R
+
 [commit]
-	template	= ~/.gitmessage
+  template	= ~/.gitmessage
+
 [ush]
-	default	= simple
+  default	= simple
+
 [pager]
-	grep	= false
-	diff	= false
+  grep	= false
+  diff	= false
+
 [diff]
-	colorMoved	= true
+  colorMoved	= true
+
 [pull]
-	rebase = false
+  rebase = false
+
+[include]
+  path	= ~/.gitconfig_local
