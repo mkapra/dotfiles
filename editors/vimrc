@@ -22,6 +22,8 @@ if has('vim')
 endif
 Plug 'tpope/vim-sleuth'                 	" heuristic file indendation
 Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-fugitive'
+Plug 'lewis6991/gitsigns.nvim'
 Plug 'jiangmiao/auto-pairs'
 
 Plug 'sainnhe/everforest'
@@ -209,7 +211,7 @@ lua << EOF
       }
     },
   })
-  --require("telescope").load_extension("noice")
+  -- require("telescope").load_extension("noice")
 EOF
 endif
 
@@ -527,5 +529,12 @@ if has('nvim')
         },
       })
     end
+EOF
+endif
+
+" ============================== gitsigns
+if has('nvim')
+lua << EOF
+  require("gitsigns").setup{}
 EOF
 endif
