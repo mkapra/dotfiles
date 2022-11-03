@@ -11,7 +11,7 @@ fonts() {
   then
     mkdir -p $HOME/.local/share/fonts
     ln -fs $SCRIPT/submodules/sfmono-font/SF* $HOME/.local/share/fonts/
-    fc-cache -f -v
+    fc-cache -f -v &> /dev/null
   fi
 }
 
