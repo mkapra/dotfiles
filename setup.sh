@@ -15,19 +15,33 @@ fonts() {
   fi
 }
 
-# ============================== gnome-terminal color scheme
-# NOT WORKING YET
-gt_colorscm() {
-  if which gnome-terminal &> /dev/null
-  then
-    echo "-- Install everforest gnome-terminal theme"
-    converter="$SCRIPT/submodules/iterm-color-to-gnome-terminal"
-    echo 'Converting...'
-    python3 $converter/iterm-color-to-gnome-terminal.py \
-      -n 'Everforest Hard Light' \
-      $SCRIPT/submodules/everforest.iterm2/Everforest_hard_light.itermcolors \
-      | python3 $converter/import-gnome-terminal-profile.py -n 'Everforest Hard Light'
-  fi
+# ============================== gnome-terminal
+gnome_terminal() {
+  # shortcuts
+  shortcuts() {
+    if which gnome-terminal &> /dev/null
+    then
+      gsettings set org.gnome.Terminal.Legacy.Keybindings:/org/gnome/terminal/legacy/keybindings/ next-tab '<Primary>Tab'
+      gsettings set org.gnome.Terminal.Legacy.Keybindings:/org/gnome/terminal/legacy/keybindings/ prev-tab '<Primary><Shift>Tab'
+    fi
+  }
+
+  # color scheme
+  # NOT WORKING YET
+  gt_colorscm() {
+    if which gnome-terminal &> /dev/null
+    then
+      echo "-- Install everforest gnome-terminal theme"
+      converter="$SCRIPT/submodules/iterm-color-to-gnome-terminal"
+      echo 'Converting...'
+      python3 $converter/iterm-color-to-gnome-terminal.py \
+        -n 'Everforest Hard Light' \
+        $SCRIPT/submodules/everforest.iterm2/Everforest_hard_light.itermcolors \
+        | python3 $converter/import-gnome-terminal-profile.py -n 'Everforest Hard Light'
+    fi
+  }
+
+  shortcuts
 }
 
 # ============================== vim
@@ -92,6 +106,7 @@ git() {
 
 # gt_colorscm
 fonts
+gnome_terminal
 vim
 shells
 tmux
