@@ -21,9 +21,13 @@ HISTFILESIZE=2000
 shopt -s checkwinsize
 
 # ============================== Shortcuts
+set -o vi
 # Bind C-f to the fg command to be able to bring a background command to the
 # foreground faster
 bind -x '"\C-f":"fg"'
+bind '"\C-n":yank-last-arg'
+bind '"\C-a":beginning-of-line'
+bind '"\C-e":end-of-line'
 
 # ============================== Functions
 parse_git_dir() {

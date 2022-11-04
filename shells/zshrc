@@ -47,6 +47,34 @@ then
   . $HOME/.zsh_aliases
 fi
 
+# ============================== vi-Mode
+bindkey -v
+export KEYTIMEOUT=1
+
+# Updates editor information when the keymap changes.
+function zle-keymap-select() {
+  zle reset-prompt
+  zle -R
+}
+
+zle -N zle-keymap-select
+
+function vi_mode_prompt_info() {
+  MODE_INDICATOR="%{$fg[green]%}<<<%{$reset_color%}"
+  echo "${${KEYMAP/vicmd/$MODE_INDICATOR}/(main|viins)/}"
+}
+
+# Show mode indication on right side
+RPS1='$(vi_mode_prompt_info)'
+RPS2=$RPS1
+
+# Enable backspace to delete in vi-mode
+bindkey -v '^?' backward-delete-char
+
+bindkey -v '^E' end-of-line
+bindkey -v '^A' beginning-of-line
+bindkey -v '^N' insert-last-word
+
 # ============================== Completion
 unsetopt menu_complete   # do not autoselect the first completion entry
 unsetopt flowcontrol
