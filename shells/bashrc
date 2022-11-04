@@ -28,6 +28,7 @@ bind -x '"\C-f":"fg"'
 bind '"\C-n":yank-last-arg'
 bind '"\C-a":beginning-of-line'
 bind '"\C-e":end-of-line'
+bind '"\C-l": clear-screen'
 
 # ============================== Functions
 parse_git_dir() {
