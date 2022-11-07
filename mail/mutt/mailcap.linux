@@ -1,0 +1,120 @@
+application/vnd.oasis.opendocument.spreadsheet;                           mutt_bgrun libreoffice --nologo %s; test=test -n "$DISPLAY"
+application/vnd.oasis.opendocument.spreadsheet;                            odt2txt %s | cat --squeeze-blank; copiousoutput
+
+application/vnd.oasis.opendocument.presentation;                           mutt_bgrun libreoffice --nologo %s; test=test -n "$DISPLAY"
+application/vnd.oasis.opendocument.presentation;                           odt2txt %s | cat --squeeze-blank; copiousoutput
+
+application/vnd.openxmlformats-officedocument.wordprocessingml.document;   mutt_bgrun libreoffice --nologo %s; nametemplate=%s.docx; test=test -n "$DISPLAY"
+application/vnd.openxmlformats-officedocument.wordprocessingml.document;   docx2txt.pl %s - | cat --squeeze-blank; nametemplate=%s.docx; copiousoutput
+# application/vnd.openxmlformats-officedocument.wordprocessingml.document;   pandoc --from=docx --to=plain %s | cat --squeeze-blank; nametemplate=%s.docx; copiousoutput
+application/vnd.openxmlformats-officedocument.wordprocessingml.template;   mutt_bgrun libreoffice --nologo %s; nametemplate=%s.docm; test=test -n "$DISPLAY"
+application/vnd.openxmlformats-officedocument.wordprocessingml.template;   docx2txt.pl %s - | cat --squeeze-blank; nametemplate=%s.docm; copiousoutput
+
+application/msword;                                                        mutt_bgrun libreoffice --nologo %s; test=test -n "$DISPLAY"
+application/msword;                                                        wvHtml --charset=utf-8 %s - | w3m -dump -T text/html; copiousoutput
+# application/msword;                                                        antiword -- %s | cat --squeeze-blank; copiousoutput
+# application/msword;                                                        catdoc -- %s | cat --squeeze-blank; copiousoutput
+
+application/vnd.msword;                                                    mutt_bgrun libreoffice --nologo %s; test=test -n "$DISPLAY"
+application/vnd.msword;                                                    wvHtml --charset=utf-8 %s - | w3m -dump -T text/html; copiousoutput
+
+application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;         mutt_bgrun libreoffice --nologo %s; test=test -n "$DISPLAY"
+application/vnd.ms-excel;                                                  xlscat -a %{charset} %s; copiousoutput
+# application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;         xlsx2csv.py %s | cat --squeeze-blank; nametemplate=%s.xlsx; copiousoutput
+# application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;         excel2csv --file %s; nametemplate=%s.xlsx; copiousoutput
+application/vnd.openxmlformats-officedocument.spreadsheetml.template;      mutt_bgrun libreoffice --nologo %s; test=test -n "$DISPLAY"
+
+application/vnd.ms-excel;                                                  mutt_bgrun libreoffice --nologo %s; test=test -n "$DISPLAY"
+application/vnd.ms-excel;                                                  xlscat -a %{charset} -b WINDOWS-1252 %s; copiousoutput
+# application/vnd.ms-excel;                                                  excel2csv %s --trim; copiousoutput
+
+application/vnd.openxmlformats-officedocument.presentationml.presentation; mutt_bgrun libreoffice --nologo %s; test=test -n "$DISPLAY"
+application/vnd.openxmlformats-officedocument.presentationml.presentation; pptx2md --disable_image --disable_wmf %s --output ~/.cache/mutt/presentation.md >/dev/null && cat --squeeze-blank ~/.cache/mutt/presentation.md; nametemplate=%s.pptx; copiousoutput
+application/vnd.openxmlformats-officedocument.presentationml.template;     mutt_bgrun libreoffice --nologo %s; test=test -n "$DISPLAY"
+application/vnd.openxmlformats-officedocument.presentationml.slideshow;    mutt_bgrun libreoffice --nologo %s; test=test -n "$DISPLAY"
+
+application/vnd.ms-powerpoint;     mutt_bgrun libreoffice --nologo %s; test=test -n "$DISPLAY"
+application/vnd.ms-powerpoint;     ppthtml %s | w3m -dump -T text/html; copiousoutput
+
+application/pdf;                   mutt_bgrun "${PDFVIEWER:-zathura}" %s; test=test -n "$DISPLAY"; nametemplate=%s.pdf; description="PDF Document"
+application/pdf;                   pdftotext -l 20 -nopgbrk -q -htmlmeta -- %s - | w3m -dump -T text/html; nametemplate=%s.pdf; copiousoutput
+
+application/x-pdf;                 mutt_bgrun "${PDFVIEWER:-zathura}" %s; test=test -n "$DISPLAY"; nametemplate=%s.pdf; description="PDF Document"
+application/x-pdf;                 pdftotext -l 20 -nopgbrk -q -htmlmeta -- %s - | w3m -dump -T text/html; nametemplate=%s.pdf; copiousoutput
+
+application/x-bzpdf;               mutt_bgrun "${PDFVIEWER:-zathura}" %s; test=test -n "$DISPLAY"; nametemplate=%s.pdf.bz2; description="PDF Document"
+application/x-gzpdf;               mutt_bgrun "${PDFVIEWER:-zathura}" %s; test=test -n "$DISPLAY"; nametemplate=%s.pdf.gz; description="PDF Document"
+application/x-xzpdf;               mutt_bgrun "${PDFVIEWER:-zathura}" %s; test=test -n "$DISPLAY"; nametemplate=%s.pdf.xz; description="PDF Document"
+
+application/rtf;                   mutt_bgrun libreoffice --nologo %s; test=test -n "$DISPLAY"
+application/rtf;                   unrtf --html %s | w3m -dump -T text/html; copiousoutput
+application/richtext;              mutt_bgrun libreoffice --nologo %s; test=test -n "$DISPLAY"
+application/richtext;              unrtf --html %s | w3m -dump -T text/html; copiousoutput
+
+application/epub+zip;              mutt_bgrun kchmviewer %s; test=test -n "$DISPLAY"
+application/epub+zip;              pandoc --from epub --to plain %s | cat --squeeze-blank; copiousoutput
+
+image/vnd.djvu;                    mutt_bgrun "${PDFVIEWER:-qpdfview}" %s; test=test -n "$DISPLAY"; nametemplate=%s.pdf.gz; description="DJVU Document"
+image/vnd.djvu;                    djvutxt --page=1-20 %s | cat --squeeze-blank; copiousoutput
+
+application/x-tar;                 tar tvvf %s; copiousoutput
+application/x-rar-compressed;      unrar v %s; copiousoutput
+application/x-tar-gz;              tar tvfz %s; copiousoutput
+application/zip;                   unzip -l %s; copiousoutput
+application/x-zip-compressed;      unzip -l %s; copiousoutput
+application/x-bzip-compressed-tar; tar jtvvf %s; copiousoutput
+
+application/x-tex;                 highlight --out-format=ansi --force -- %s; copiousoutput
+application/x-latex;               highlight --out-format=ansi --force -- %s; copiousoutput
+application/x-perl;                highlight --out-format=ansi --force -- %s; copiousoutput
+application/x-script;              highlight --out-format=ansi --force -- %s; copiousoutput
+application/x-shellscript;         highlight --out-format=ansi --force -- %s; copiousoutput
+application/x-sh;                  highlight --out-format=ansi --force -- %s; copiousoutput
+
+application/pgp-signature;         highlight --out-format=ansi --force -- %s; copiousoutput
+
+application/octet-stream;          mutt.octet.filter %s; copiousoutput
+
+application/*;                     mutt_bgrun xdg-open 2>/dev/null %s; test=test -n "$DISPLAY"
+application/*;                     libreoffice --cat %s | cat --squeeze-blank; copiousoutput
+
+text/html;                         w3m -I %{charset} -T text/html; copiousoutput
+
+text/x-vcard;                      mutt.vcard.filter; copiousoutput
+
+text/x-diff;                       highlight --out-format=ansi --force -- %s; copiousoutput
+text/x-patch;                      highlight --out-format=ansi --force -- %s; copiousoutput
+
+text/calendar;                     vcalendar-filter; nametemplate=%s.ics; copiousoutput
+text/x-vcalendar;                  vcalendar-filter; nametemplate=%s.ics; copiousoutput
+application/ics;                   vcalendar-filter; nametemplate=%s.ics; copiousoutput
+# text/calendar;                     mutt-ics; nametemplate=%s.ics; copiousoutput
+# text/x-vcalendar;                  mutt-ics; nametemplate=%s.ics; copiousoutput
+# application/ics;                   mutt-ics; nametemplate=%s.ics; copiousoutput
+
+text/*;                            mutt_bgrun xdg-open 2>/dev/null %s; test=test -n "$DISPLAY"
+text/*;                            highlight --out-format=ansi --force -- %s; copiousoutput
+
+message/*;                         mutt_bgrun xdg-open 2>/dev/null %s; test=test -n "$DISPLAY"
+message/*;                         libreoffice --cat %s | cat --squeeze-blank; copiousoutput
+
+multipart/*;                       mutt_bgrun xdg-open 2>/dev/null %s; test=test -n "$DISPLAY"
+multipart/*;                       libreoffice --cat %s | cat --squeeze-blank; copiousoutput
+
+image/*;                           mutt_bgrun feh -Tview -- %s; description="Image"; test=test -n "$DISPLAY"
+# image/*;                         mutt_bgrun xdg-open 2>/dev/null %s; test=test -n "$DISPLAY"
+image/*;                           magick identify -ping -format "\%[EXIF:*]" %s; copiousoutput
+
+audio/*;                           mutt_bgrun xdg-open 2>/dev/null %s; description="Audio"; test=test -n "$DISPLAY"
+# audio/*;                           mutt_bgrun smplayer 2>/dev/null %s; description="Audio"; test=test -n "$DISPLAY"
+audio/*;                           mediainfo %s; copiousoutput
+
+video/*;                           mutt_bgrun xdg-open 2>/dev/null %s; description="Video"; test=test -n "$DISPLAY"
+# video/*;                           mutt_bgrun smplayer 2>/dev/null %s; description="Audio"; test=test -n "$DISPLAY"
+video/*;                           mediainfo %s; copiousoutput
+
+x-content/*;                       mutt_bgrun xdg-open 2>/dev/null %s; test=test -n "$DISPLAY"
+x-content/*;                       LESSQUIET=1 lesspipe.sh %s; copiousoutput
+
+x-epoc/*;                          mutt_bgrun xdg-open 2>/dev/null %s; test=test -n "$DISPLAY"
+x-epoc/*;                          LESSQUIET=1 lesspipe.sh %s; copiousoutput

@@ -1,0 +1,29 @@
+application/vnd.oasis.opendocument.spreadsheet;                           mutt_bgrun open %s; test=test -n "$DISPLAY"
+application/vnd.oasis.opendocument.spreadsheet;                           pandoc --from=odt --to=plain %s | cat --squeeze-blank; nametemplate=%s.odt; copiousoutput
+
+application/vnd.oasis.opendocument.presentation;                          mutt_bgrun libreoffice --nologo %s; test=test -n "$DISPLAY"
+application/vnd.oasis.opendocument.spreadsheet;                           pandoc --from=odp --to=plain %s | cat --squeeze-blank; nametemplate=%s.odp; copiousoutput
+
+application/vnd.openxmlformats-officedocument.wordprocessingml.document;   mutt_bgrun open %s; nametemplate=%s.docx; test=test -n "$DISPLAY"
+application/vnd.openxmlformats-officedocument.wordprocessingml.document;   pandoc --from=docx --to=plain %s | cat --squeeze-blank; nametemplate=%s.docx; copiousoutput
+application/vnd.openxmlformats-officedocument.wordprocessingml.template;   mutt_bgrun open %s; nametemplate=%s.docm; test=test -n "$DISPLAY"
+application/vnd.openxmlformats-officedocument.wordprocessingml.template;   docx2txt.pl %s - | cat --squeeze-blank; nametemplate=%s.docm; copiousoutput
+application/vnd.openxmlformats-officedocument.wordprocessingml.template;   pandoc --from=docm --to=plain %s | cat --squeeze-blank; nametemplate=%s.docm; copiousoutput
+
+application/pdf;                   mutt_bgrun "${PDFVIEWER:-open}" %s; test=test -n "$DISPLAY"; nametemplate=%s.pdf; description="PDF Document"
+application/pdf;                   pandoc --from=pdf --to=plain %s | cat --squeeze-blank; nametemplate=%s.pdf; copiousoutput
+
+application/octet-stream;          mutt.octet.filter %s; copiousoutput
+
+application/*;                     mutt_bgrun open 2>/dev/null %s; test=test -n "$DISPLAY"
+
+text/html;                         w3m -I %{charset} -T text/html; copiousoutput
+
+text/x-vcard;                      mutt.vcard.filter; copiousoutput
+
+text/calendar;                     vcalendar-filter; nametemplate=%s.ics; copiousoutput
+text/x-vcalendar;                  vcalendar-filter; nametemplate=%s.ics; copiousoutput
+application/ics;                   vcalendar-filter; nametemplate=%s.ics; copiousoutput
+# text/calendar;                     mutt-ics; nametemplate=%s.ics; copiousoutput
+# text/x-vcalendar;                  mutt-ics; nametemplate=%s.ics; copiousoutput
+# application/ics;                   mutt-ics; nametemplate=%s.ics; copiousoutput

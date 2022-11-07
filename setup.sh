@@ -116,10 +116,66 @@ git() {
   fi
 }
 
-# gt_colorscm
+# ============================== Mail
+mail() {
+  if which mutt &> /dev/null
+  then
+    echo '-- Setting up mutt'
+    mkdir -p $HOME/.mutt/.cache
+    ln -fs $SCRIPT/mail/mutt/rc $HOME/.mutt/muttrc
+    ln -fs $SCRIPT/mail/mutt/theme $HOME/.mutt/theme
+    ln -fs $SCRIPT/submodules/mutt_bgrun/mutt_bgrun $HOME/.local/bin/mutt_bgrun
+    chmod +x $HOME/.local/bin/mutt_bgrun
+
+    if [[ "$(uname -a)" == *"Darwin"* ]]
+    then
+      echo 'Adding mailcap file for MacOS'
+      ln -fs $SCRIPT/mail/mutt/mailcap.macos $HOME/.mutt/mailcap
+    elif [[ "$(uname -a)" == *"Linux"* ]]
+    then
+      echo 'Adding mailcap file for Linux'
+      ln -fs $SCRIPT/mail/mutt/mailcap.linux $HOME/.mutt/mailcap
+    fi
+  fi
+}
+
+# ============================== Rust Tools
+rust() {
+  if which cargo &> /dev/null
+  then
+    tools=('exa' 'rg')
+    commands=('ls' 'grep')
+    aliasses=('exa --icons' 'rg')
+
+    echo "-- Installing ${tools[@]} with cargo"
+    i=0
+    for tool in "${tools[@]}"
+    do
+      grep -q "${aliasses[i]}" $HOME/.local_shrc && found=1 || found=0
+      if [ $found -eq 0 ]
+      then
+        echo "Setting alias for ${commands[i]} -> ${aliasses[i]}"
+        eval "echo \"alias ${commands[i]}='${aliasses[i]}'\" >> $HOME/.local_shrc"
+      fi
+
+      if which $tool &> /dev/null
+      then
+        echo "Tool $tool found. Doing nothing..."
+        let i++
+        continue
+      fi
+
+      cargo install -q $tool
+      let i++
+    done
+  fi
+}
+
 fonts
 gnome_terminal
 vim
 shells
 tmux
 git
+mail
+rust

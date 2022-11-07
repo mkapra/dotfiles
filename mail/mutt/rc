@@ -1,0 +1,24 @@
+# vim: filetype=muttrc
+
+# ============================== WHOIS
+set realname = "Maximilian Kapra"
+
+# ============================== General
+set sort = threads
+set sort_aux = last-date-received
+set move = no
+set imap_keepalive = 900
+# Load theme
+source ~/.mutt/theme
+# Mailcap
+set mailcap_path = ~/.mutt/mailcap
+auto_view text/html
+alternative_order text/plain text/html
+
+# ============================== Caching
+set header_cache     = ~/.mutt/cache/headers
+set message_cachedir = ~/.mutt/cache/bodies
+set certificate_file = ~/.mutt/certificates
+
+# ============================== Local configuration
+source ~/.mutt/local_config

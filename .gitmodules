@@ -7,3 +7,6 @@
 [submodule "submodules/sfmono-font"]
 	path = submodules/sfmono-font
 	url = https://github.com/epk/SF-Mono-Nerd-Font.git
+[submodule "submodules/mutt_bgrun"]
+	path = submodules/mutt_bgrun
+	url = https://github.com/RichiH/mutt_bgrun.git
