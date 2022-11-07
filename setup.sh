@@ -58,14 +58,21 @@ vim() {
   echo "-- Installing vim-plug"
   if which nvim &> /dev/null
   then
-    sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
+    sh -c 'curl --silent -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
   fi
 
   if which vim &> /dev/null
   then
-    curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+    curl --silent -fLo ~/.vim/autoload/plug.vim --create-dirs \
       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  fi
+
+  if which brew &> /dev/null
+  then
+    mkdir -p $HOME/.config/svim
+    ln -fs $SCRIPT/editors/svim/blacklist $HOME/.config/svim/blacklist
+    brew services restart svim &> /dev/null
   fi
 
   echo 'Do not forget to launch (n)vim and install all the plugins'
