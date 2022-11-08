@@ -24,7 +24,6 @@ ignore          *
 unignore        From: Reply-To: To: Cc: Date: Subject: X-Mailer: User-agent: X-OS:
 hdr_order       From: To: Cc: Date: Subject:
 
-
 # ============================== Caching
 set header_cache     = ~/.mutt/cache/headers
 set message_cachedir = ~/.mutt/cache/bodies
