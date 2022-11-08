@@ -1,0 +1,10 @@
+[/]
+background-color='#FFF9E8'
+font='SFMono Nerd Font Regular 12'
+foreground-color='#5C6A72'
+palette=['#A6B0A0', '#F85552', '#8DA101', '#DFA000', '#3A94C5', '#DF69BA', '#35A77C', '#EEE8D5', '#939F91', '#F85552', '#8DA101', '#DFA000', '#3A94C5', '#DF69BA', '#35A77C', '#FDF6E3']
+scrollbar-policy='never'
+use-system-font=false
+use-theme-colors=false
+visible-name='Everforest Light Hard'
+bold-color='#DBBC7F'

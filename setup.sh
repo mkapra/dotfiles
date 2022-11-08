@@ -32,21 +32,19 @@ gnome_terminal() {
   }
 
   # color scheme
-  # NOT WORKING YET
   gt_colorscm() {
     if which gnome-terminal &> /dev/null
     then
       echo "-- Install everforest gnome-terminal theme"
-      converter="$SCRIPT/submodules/iterm-color-to-gnome-terminal"
-      echo 'Converting...'
-      python3 $converter/iterm-color-to-gnome-terminal.py \
-        -n 'Everforest Hard Light' \
-        $SCRIPT/submodules/everforest.iterm2/Everforest_hard_light.itermcolors \
-        | python3 $converter/import-gnome-terminal-profile.py -n 'Everforest Hard Light'
+      profileId=$(dconf list /org/gnome/terminal/legacy/profiles:/ | grep -v default | grep -v list)
+      dconf reset -f /org/gnome/terminal/legacy/profiles:/
+      echo "Installing profile to id '${profileId}'"
+      dconf load /org/gnome/terminal/legacy/profiles:/${profileId} < $SCRIPT/terminals/gnome-terminal/everforest-theme.dconf
     fi
   }
 
   shortcuts
+  gt_colorscm
 }
 
 # ============================== vim

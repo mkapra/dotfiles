@@ -1,9 +1,6 @@
 [submodule "submodules/everforest.iterm2"]
 	path = submodules/everforest.iterm2
 	url = https://github.com/icewind/everforest.iterm2.git
-[submodule "submodules/iterm-color-to-gnome-terminal"]
-	path = submodules/iterm-color-to-gnome-terminal
-	url = https://github.com/Photonios/iterm-color-to-gnome-terminal.git
 [submodule "submodules/sfmono-font"]
 	path = submodules/sfmono-font
 	url = https://github.com/epk/SF-Mono-Nerd-Font.git
