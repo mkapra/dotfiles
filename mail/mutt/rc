@@ -2,18 +2,28 @@
 
 # ============================== WHOIS
 set realname = "Maximilian Kapra"
+set use_from = yes
+set envelope_from = yes
 
 # ============================== General
 set sort = threads
 set sort_aux = last-date-received
 set move = no
-set imap_keepalive = 900
+set imap_check_subscribed
+set mail_check=30
+set imap_keepalive=45
 # Load theme
 source ~/.mutt/theme
 # Mailcap
 set mailcap_path = ~/.mutt/mailcap
 auto_view text/html
 alternative_order text/plain text/html
+
+# ============================== Mail Headers
+ignore          *
+unignore        From: Reply-To: To: Cc: Date: Subject: X-Mailer: User-agent: X-OS:
+hdr_order       From: To: Cc: Date: Subject:
+
 
 # ============================== Caching
 set header_cache     = ~/.mutt/cache/headers
