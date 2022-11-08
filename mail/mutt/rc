@@ -11,7 +11,7 @@ set sort_aux = last-date-received
 set move = no
 set imap_check_subscribed
 set mail_check=30
-set imap_keepalive=45
+set imap_keepalive=30
 # Load theme
 source ~/.mutt/theme
 # Mailcap
