@@ -79,6 +79,10 @@ if has('nvim')
     Plug 'saadparwaiz1/cmp_luasnip'     " Make LuaSnip work with cmp
   endif
 
+  if has('nvim-0.6.0')
+    Plug 'sidebar-nvim/sidebar.nvim'
+  endif
+
   Plug 'folke/todo-comments.nvim'
   Plug 'folke/which-key.nvim'
 endif
@@ -266,6 +270,7 @@ require('lualine').setup({
   options = {
     -- lualine comes with 'everforest' theme
     theme = 'everforest',
+    globalstatus = true,
   },
   tabline = {
     lualine_a = {
@@ -438,6 +443,25 @@ if has('nvim-0.7.0')
 EOF
 endif
 
+" ============================== sidebar
+if has('nvim-0.6.0')
+lua << EOF
+  local sidebar = require("sidebar-nvim").setup{
+    open=true,
+    hide_statusline = true,
+    sections = { "files", "todos", "diagnostics", "symbols", "git", "containers" },
+    containers = {
+      attach_shell = "/bin/sh", show_all = true, interval = 5000,
+    },
+    todos = {
+      icon = "",
+      ignored_paths = {'~'}, -- ignore certain paths, this will prevent huge folders like $HOME to hog Neovim with TODO searching
+      initially_closed = false, -- whether the groups should be initially closed on start. You can manually open/close groups later.
+    }
+  }
+EOF
+endif
+
 " ============================== Shortcuts
 if has('nvim')
   lua << EOF
@@ -459,6 +483,7 @@ if has('nvim')
     wk.register({
       ["<leader>"] = {
         i = {
+          name = "symbols",
           e = { "Emoji" },
           m = { "Math symbol" },
           n = { "Nerd Font icon" },
@@ -472,12 +497,13 @@ if has('nvim')
     map("n", "<leader>le", "<cmd> Telescope diagnostics<CR>", default_opts)           -- Show errors and warnings
     map("n", "<leader>lf", "<cmd> lua vim.lsp.buf.formatting()<CR>", default_opts)    -- Format buffer with LSP
     map("n", "<leader>lh", "<cmd> lua vim.lsp.buf.hover()<CR>", default_opts)         -- Show info of symbol (double tap to enter)
-    map("n", "<leader>lr", "<cmd> Telescope lsp_references<CR>", default_opts)        -- Show all LSP references
+    map("n", "<leader>lb", "<cmd> Telescope lsp_references<CR>", default_opts)        -- Show all LSP references
     map("n", "<leader>ls", "<cmd> Telescope lsp_workspace_symbols<CR>", default_opts) -- Search for LSP symbols
     map("n", "<leader>lt", "<cmd> TodoTelescope<CR>", default_opts)                   -- Search for LSP symbols^
     wk.register({
       ["<leader>"] = {
         l = {
+          name = "lsp",
           a = { "Actions" },
           d = { "Definitions" },
           e = { "Errors" },
@@ -527,6 +553,13 @@ if has('nvim')
             select = true,
           }),
         },
+      })
+
+      map("n", "<leader>b", "<cmd> SidebarNvimToggle<CR>", default_opts)
+      wk.register({
+        ["<leader>"] = {
+          b = { "Toggle sidebar" }
+        }
       })
     end
 EOF
