@@ -374,7 +374,7 @@ if has('nvim-0.7.0')
 lua << EOF
 require("mason").setup()
 EOF
-else
+elseif has('nvim')
 lua << EOF
 require("nvim-lsp-installer").setup({
   automatic_installation = true,
