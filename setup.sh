@@ -81,6 +81,9 @@ shells() {
   echo '-- Setting up shells'
   ln -fs $SCRIPT/shells/generic_shrc $HOME/.generic_shrc
 
+  echo '-- Setting up ssh rc'
+  ln -fs $SCRIPT/shells/sshrc $HOME/.ssh/rc
+
   if which bash &> /dev/null
   then
     echo 'Link bash configuration'

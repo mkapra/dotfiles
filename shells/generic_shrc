@@ -9,6 +9,10 @@ export LC_ALL=en_US.UTF-8
 export LC_MESSAGES=en_US.UTF-8
 export LANG=en_US.UTF-8
 export PATH=$HOME/.local/bin:$PATH
+if [ "x$IS_SSH_MACHINE" == "x1" ]
+then
+  export SSH_AUTH_SOCK=/tmp/$USER.agent.sock
+fi
 
 # ============================== Aliases
 alias g='git'

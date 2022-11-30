@@ -7,8 +7,6 @@ esac
 
 # Source other configurations
 [ -f ~/.generic_shrc ] && source ~/.generic_shrc
-[ -f ~/.local_shrc ] && source ~/.local_shrc # Source local settings
-[ -f ~/.zshrc_local ] && source ~/.zshrc_local # Source local settings
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
 # ============================== Prompt
@@ -220,3 +218,6 @@ fancy-ctrl-z () {
 }
 zle -N fancy-ctrl-z
 bindkey '^Z' fancy-ctrl-z
+
+[ -f ~/.local_shrc ] && source ~/.local_shrc # Source local settings
+[ -f ~/.zshrc_local ] && source ~/.zshrc_local # Source local settings
