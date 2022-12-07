@@ -19,7 +19,13 @@ setopt prompt_subst
 ICON="%(?.%{$fg[green]%}.%{$fg[red]%})λ"
 DIR="%{$fg[blue]%}%~"
 GIT="%{$fg[red]%}\$vcs_info_msg_0_"
-HOSTN="%{$fg[yellow]%}%m "
+id | grep root &> /dev/null
+if [ $? -eq 0 ]
+then
+    HOSTN="%{$fg[red]%}%m "
+else
+    HOSTN="%{$fg[yellow]%}%m "
+fi
 
 export PROMPT="${HOSTN}${DIR}${GIT} ${BREAK}${ICON}%{$reset_color%} "
 zstyle ':vcs_info:git:*' formats ' (%b )'

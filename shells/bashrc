@@ -47,7 +47,13 @@ parse_git_dir() {
 PROMPT_COMMAND=__prompt_command
 __prompt_command() {
   EXIT=$?
-  PS1='\e[33m\h\e[0m \w '
+  id | grep root &> /dev/null
+  if [ $? -eq 0 ]
+  then
+    PS1='\e[31m\h\e[0m \w '
+  else
+    PS1='\e[33m\h\e[0m \w '
+  fi
   PS1+='\[\033[0;36m\]$(parse_git_dir)\[\033[00m\]'
 
   local red_lambda='\e[0;31mλ\e[0m '
