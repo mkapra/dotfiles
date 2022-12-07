@@ -114,6 +114,14 @@ git() {
     echo '-- Setting up git'
     ln -fs $SCRIPT/git/message $HOME/.gitmessage
     ln -fs $SCRIPT/git/config $HOME/.gitconfig
+
+    echo '-- Installing lazygit'
+    LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep '"tag_name":' |  sed -E 's/.*"v*([^"]+)".*/\1/')
+    curl --silent -Lo /tmp/lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz"
+    tar xf /tmp/lazygit.tar.gz -C $HOME/.local/bin lazygit
+    rm /tmp/lazygit.tar.gz
+    mkdir -p $HOME/.config/lazygit
+    ln -fs $SCRIPT/git/lazygit.conf $HOME/.config/lazygit/config.yml
   fi
 }
 

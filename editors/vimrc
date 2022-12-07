@@ -39,6 +39,7 @@ Plug 'vim-scripts/vim-auto-save'                " Auto save files
 " Plugins only for nvim
 if has('nvim')
   Plug 'folke/which-key.nvim'                   " display possible key bindings
+  Plug 'kdheepak/lazygit.nvim'                  " Git
 
   if v:version > 600
     Plug 'nvim-treesitter/nvim-treesitter'
@@ -238,7 +239,6 @@ lua << EOF
 require("todo-comments").setup{}
 EOF
 endif
-
 
 " ============================== navic
 if has('nvim')
@@ -686,6 +686,16 @@ wk.register({
     }
   }
 })
+
+map("n", "<leader>gg", "<cmd> LazyGit<CR>", default_opts)
+wk.register({
+  ["<leader>"] = {
+    g = {
+      g = { "LazyGit" },
+    },
+  },
+})
+
 
 map("n", "<leader>lr", "<cmd> lua vim.lsp.buf.rename()<CR>", default_opts)        -- Rename LSP symbol
 map("n", "<leader>la", "<cmd> lua vim.lsp.buf.code_action()<CR>", default_opts)   -- Apply LSP code action
