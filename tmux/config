@@ -16,6 +16,8 @@ set -s escape-time 5
 
 set -g status-position bottom
 
+set -g pane-border-indicators arrows
+
 # -------------------- Clipboard
 # copy to system clipboard
 bind C-c run "tmux save-buffer - | xclip -i -sel clipboard"
