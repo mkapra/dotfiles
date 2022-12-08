@@ -66,13 +66,6 @@ vim() {
       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
   fi
 
-  if which brew &> /dev/null
-  then
-    mkdir -p $HOME/.config/svim
-    ln -fs $SCRIPT/editors/svim/blacklist $HOME/.config/svim/blacklist
-    brew services restart svim &> /dev/null
-  fi
-
   echo 'Do not forget to launch (n)vim and install all the plugins'
 }
 
