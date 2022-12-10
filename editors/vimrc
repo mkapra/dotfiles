@@ -404,7 +404,7 @@ local navic = require('nvim-navic') -- breadcrumbs
 
 -- Normal LSPs
 -- Install with `:LSPInstall`
-local servers = { "pylsp", "sumneko_lua", "solargraph", "jdtls" }
+local servers = { "pylsp", "sumneko_lua", "solargraph" }
 for _, i in ipairs(servers) do
   lsp[i].setup({
     on_attach = function(client, bufnr)
@@ -576,8 +576,8 @@ cmp.setup({
     end,
   },
   sources = {
-    { name = 'luasnip', keyword_length = 2, max_item_count = 3 },
-    { name = 'nvim_lsp', keyword_length = 2, max_item_count = 10 },
+    { name = 'luasnip', max_item_count = 5 },
+    { name = 'nvim_lsp', max_item_count = 10 },
     { name = 'path' },
     { name = 'buffer', keyword_length = 5, max_item_count = 3 },
   },
@@ -641,7 +641,7 @@ require('telescope').setup({
       '--ignore-file',
       '.gitignore'
     },
-    file_ignore_patterns = { "pdf", "docx" }
+    file_ignore_patterns = { "pdf", "docx", "venv", ".git" }
   },
 })
 require("telescope").load_extension("noice")
@@ -654,10 +654,6 @@ endif
 
 " ============================== Shortcuts
 if has('nvim')
-nnoremap <leader>ff <cmd>Telescope find_files hidden=true<cr>
-nnoremap <leader>fg <cmd>Telescope live_grep<cr>
-nnoremap <leader>fb <cmd>Telescope buffers<cr>
-nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 " Reset highlighting
 nnoremap <leader>n  <cmd>noh<cr>
 
@@ -666,36 +662,19 @@ require('which-key').setup {
   layout = {
     align = "center",
   },
-  -- show_help = false,
-  -- show_keys = false,
 }
+
 local map = vim.api.nvim_set_keymap
 local default_opts = { noremap = true, silent = true }
-local wk = require 'which-key'
+
+map("n", "<leader>tt", "<cmd> ! pdflatex -shell-escape -synctex=1 %<cr>", default_opts)
+map("n", "<leader>ts", "<cmd> w<CR>:silent !/Applications/Skim.app/Contents/SharedSupport/displayline <C-r>=line('.')<CR> %<.pdf<CR><CR>", default_opts)
 
 map("n", "<leader>ie", "<cmd> lua require'telescope.builtin'.symbols{ sources = { 'emoji', 'gitmoji' } }<CR>", default_opts) -- Show emojis
 map("n", "<leader>im", "<cmd> lua require'telescope.builtin'.symbols{ sources = { 'julia' } }<CR>", default_opts)            -- Show math symbols
 map("n", "<leader>in", "<cmd> lua require'telescope.builtin'.symbols{ sources = { 'nerd' } }<CR>", default_opts)             -- Show nerd icons
-wk.register({
-  ["<leader>"] = {
-    i = {
-      name = "symbols",
-      e = { "Emoji" },
-      m = { "Math symbol" },
-      n = { "Nerd Font icon" },
-    }
-  }
-})
 
 map("n", "<leader>gg", "<cmd> LazyGit<CR>", default_opts)
-wk.register({
-  ["<leader>"] = {
-    g = {
-      g = { "LazyGit" },
-    },
-  },
-})
-
 
 map("n", "<leader>lr", "<cmd> lua vim.lsp.buf.rename()<CR>", default_opts)        -- Rename LSP symbol
 map("n", "<leader>la", "<cmd> lua vim.lsp.buf.code_action()<CR>", default_opts)   -- Apply LSP code action
@@ -706,22 +685,13 @@ map("n", "<leader>lh", "<cmd> lua vim.lsp.buf.hover()<CR>", default_opts)       
 map("n", "<leader>lb", "<cmd> Telescope lsp_references<CR>", default_opts)        -- Show all LSP references
 map("n", "<leader>ls", "<cmd> Telescope lsp_workspace_symbols<CR>", default_opts) -- Search for LSP symbols
 map("n", "<leader>lt", "<cmd> TodoTelescope<CR>", default_opts)                   -- Search for LSP symbols^
-wk.register({
-  ["<leader>"] = {
-    l = {
-      name = "lsp",
-      a = { "Actions" },
-      d = { "Definitions" },
-      e = { "Errors" },
-      f = { "Format buffer" },
-      h = { "Hover information" },
-      r = { "(Re)Name symbol" },
-      r = { "References" },
-      s = { "Symbols" },
-      t = { "TODOs" },
-    }
-  }
-})
+
+map("n", "<leader>bb", "<cmd> SidebarNvimToggle<CR>", default_opts)
+
+map("n", "<leader>ff", "<cmd> Telescope find_files hidden=true<CR>", default_opts)
+map("n", "<leader>fg", "<cmd> Telescope live_grep<CR>", default_opts)
+map("n", "<leader>fb", "<cmd> Telescope buffers<CR>", default_opts)
+map("n", "<leader>fh", "<cmd> Telescope help_tags<CR>", default_opts)
 
 if vim.fn.has('nvim-0.7') == 1 then
   map("n", "<leader>db", "<cmd> lua require'dap'.toggle_breakpoint()<CR>", default_opts)
@@ -742,36 +712,75 @@ if vim.fn.has('nvim-0.7') == 1 then
   end
   cmp.setup({
     mapping = {
-      ['<Return>'] = cmp.mapping.confirm({ select = false }),
-      ['<C-u>'] = cmp.mapping.scroll_docs(-4),
-      ['<C-d>'] = cmp.mapping.scroll_docs(4),
-      ['<Tab>'] = cmp.mapping(function(fallback) -- Next parameter
-        local col = vim.fn.col('.') - 1
-
-        if cmp.visible() then
-          cmp.select_next_item(select_opts)
-        elseif col == 0 or vim.fn.getline('.'):sub(col, col):match('%s') then
-          fallback()
-        else
-          cmp.complete()
-        end
-      end, {'i', 's'}),
-      ['<S-Tab>'] = cmp.mapping(function(fallback)
-        if cmp.visible() then
-          cmp.select_prev_item(select_opts)
-        else
-          fallback()
-        end
-      end, {'i', 's'}),
-      }
-    })
-
-  map("n", "<leader>b", "<cmd> SidebarNvimToggle<CR>", default_opts)
-  wk.register({
-    ["<leader>"] = {
-      b = { "Toggle sidebar" }
+      ['<C-d>'] = cmp.mapping.scroll_docs(-4),
+      ['<C-u>'] = cmp.mapping.scroll_docs(4),
+      ['<C-Space>'] = cmp.mapping.complete(),
+      ['<A-q>'] = cmp.mapping.close(),
+      ['<A-o>'] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
+      ['<A-p>'] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),
+      ['<Tab>'] = cmp.mapping.confirm({
+        behavior = cmp.ConfirmBehavior.Replace,
+        select = true
+      }),
     }
   })
 end
+
+local wk = require 'which-key'
+wk.register({
+  ["<leader>"] = {
+    b = {
+      name = "Sidebar",
+      b = { "Toggle sidebar" },
+    },
+    f = {
+      name = "Telescope",
+      f = { "Find files" },
+      g = { "Grep" },
+      b = { "Buffers" },
+      h = { "Help Tags" },
+    },
+    d = {
+      name = "Debug",
+      b = { "Breakpoint" },
+      c = { "Continue" },
+      s = {
+        name = "Step",
+        i = { "Into" },
+        o = { "Over" },
+      },
+      r = { "REPL" },
+      u = { "Toggle UI" },
+    },
+    g = {
+      name = "git",
+      g = { "LazyGit" },
+    },
+    i = {
+      name = "Symbols",
+      e = { "Emoji" },
+      m = { "Math symbol" },
+      n = { "Nerd Font icon" },
+    },
+    l = {
+      name = "LSP",
+      a = { "Actions" },
+      d = { "Definitions" },
+      e = { "Errors" },
+      f = { "Format buffer" },
+      h = { "Hover information" },
+      r = { "(Re)Name symbol" },
+      r = { "References" },
+      s = { "Symbols" },
+      t = { "TODOs" },
+    },
+    n = { "Reset highlighting" },
+    t = {
+      name = "TeX",
+      t = { "pdflatex" },
+      s = { "skim-synctex" },
+    },
+  },
+})
 EOF
 endif
