@@ -22,7 +22,7 @@ if has('vim')
 endif
 
 " Appearance
-Plug 'edkolev/tmuxline.vim'             	" generate a theme for tmux `:TmuxLineSnapshot ~/.tmux.theme`
+Plug 'edkolev/tmuxline.vim'             	" generate a theme for tmux `:TmuxlineSnapshot ~/.tmux.theme`
 Plug 'frazrepo/vim-rainbow'
 Plug 'sainnhe/everforest'                       " Everforest colorscheme
 "" Airline for normal vim and tmuxline
@@ -137,7 +137,7 @@ endif
 
 syntax on
 set background=light
-let g:everforest_background = 'hard'
+let g:everforest_background = 'medium'
 let g:everforest_better_performance = 1
 colorscheme everforest
 set termguicolors
