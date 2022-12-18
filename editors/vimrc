@@ -202,7 +202,7 @@ if has('nvim')
 lua << EOF
   require'nvim-treesitter.configs'.setup {
     -- A list of parser names, or "all"
-    ensure_installed = { "bash", "jsonc", "regex", "rust", "ruby", "python" },
+    ensure_installed = { "vim", "bash", "jsonc", "regex", "rust", "ruby", "python" },
     -- Automatically install missing parsers when entering buffer
     -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
     auto_install = true,
