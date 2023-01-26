@@ -36,10 +36,12 @@ gnome_terminal() {
     if which gnome-terminal &> /dev/null
     then
       echo "-- Install everforest gnome-terminal theme"
-      profileId=$(dconf list /org/gnome/terminal/legacy/profiles:/ | grep -v default | grep -v list)
       dconf reset -f /org/gnome/terminal/legacy/profiles:/
-      echo "Installing profile to id '${profileId}'"
-      dconf load /org/gnome/terminal/legacy/profiles:/${profileId} < $SCRIPT/terminals/gnome-terminal/everforest-theme.dconf
+      dconf load / < $SCRIPT/terminals/gnome-terminal/everforest-dark-hard-theme.dconf
+      dconf load / < $SCRIPT/terminals/gnome-terminal/everforest-light-hard-theme.dconf
+      dconf write /org/gnome/terminal/legacy/default-profile "'b1dcc9dd-5262-4d8d-a863-c897e6d979b9'"
+
+      ln -fs $SCRIPT/terminals/gnome-terminal/gnome_terminal_profile_nightlight.sh $HOME/.local/bin/
     fi
   }
 

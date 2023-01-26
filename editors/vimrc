@@ -136,7 +136,11 @@ if has('termguicolors')
 endif
 
 syntax on
-set background=light
+if filereadable("/home/mkapra/.darkmode")
+    set background=dark
+else
+    set background=light
+endif
 let g:everforest_background = 'medium'
 let g:everforest_better_performance = 1
 colorscheme everforest
