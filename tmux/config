@@ -60,6 +60,9 @@ bind-key -n M-j select-pane -D
 bind-key -n M-k select-pane -U
 bind-key -n M-l select-pane -R
 
+# Get urls of current tmux buffer
+bind-key u capture-pane \; save-buffer ~/tmp/tmux-buffer \; split-window -l 10 "urlview ~/tmp/tmux-buffer"
+
 # -------------------- Colors
 set -g default-terminal "screen-256color"
 # enable true color terminal
