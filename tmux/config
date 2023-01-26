@@ -50,10 +50,6 @@ bind-key -n 'M-t' command-prompt -p "Send pane to:" "join-pane -t :'%%'"
 bind-key -n 'M-v' select-layout even-horizontal
 bind-key -n 'M-s' select-layout even-vertical
 
-# pane split
-# bind-key -n M-v split-window -h -c "#{pane_current_path}"
-# bind-key -n M-s split-window -v -c "#{pane_current_path}"
-
 # pane selection
 bind-key -n M-h select-pane -L
 bind-key -n M-j select-pane -D
@@ -62,6 +58,11 @@ bind-key -n M-l select-pane -R
 
 # Get urls of current tmux buffer
 bind-key u capture-pane \; save-buffer ~/tmp/tmux-buffer \; split-window -l 10 "urlview ~/tmp/tmux-buffer"
+
+bind-key -n M-Left select-pane -L
+bind-key -n M-Down select-pane -D
+bind-key -n M-Up select-pane -U
+bind-key -n M-Right select-pane -R
 
 # -------------------- Colors
 set -g default-terminal "screen-256color"

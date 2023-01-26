@@ -35,6 +35,7 @@ Plug 'tpope/vim-commentary'                     " commenting
 Plug 'tpope/vim-fugitive'                       " git wrapper
 Plug 'tpope/vim-sleuth'                 	" heuristic file indendation
 Plug 'vim-scripts/vim-auto-save'                " Auto save files
+Plug 'easymotion/vim-easymotion'                " Vim motion on speed
 
 " Plugins only for nvim
 if has('nvim')
@@ -195,11 +196,10 @@ let g:airline_powerline_fonts = 1
 
 let g:tmuxline_preset = {
       \'a'    : ['#H'],
+      \'z'    : ['#S'],
       \'win'  : ['#I', '#W'],
       \'cwin' : ['#[fg=black,bold]#I', '#W'],
-      \'y'    : ['%R'],
-      \'z'    : ['#S']}
-let g:tmuxline_status_justify = 'left'
+      \'options' : {'status-justify' : 'centre'}}
 
 " ============================== Treesitter
 if has('nvim')
@@ -233,7 +233,14 @@ let g:auto_save_silent = 1	    " do not display the auto-save notification
 " ============================== Noice
 if has('nvim-0.8.0')
 lua << EOF
-  require("noice").setup{}
+  require("noice").setup({
+    presets = {
+      bottom_search = true, -- use a classic bottom cmdline for search
+      command_palette = true, -- position the cmdline and popupmenu together
+      long_message_to_split = true, -- long messages will be sent to a split
+      lsp_doc_border = false, -- add a border to hover docs and signature help
+    },
+  })
 EOF
 endif
 
@@ -657,10 +664,16 @@ EOF
 endif
 
 " ============================== Shortcuts
-if has('nvim')
-" Reset highlighting
-nnoremap <leader>n  <cmd>noh<cr>
+nnoremap <leader>n  <cmd>noh<cr>    " Reset highlighting
 
+" <Leader>f{char} to move to {char}
+map <Leader>f <Plug>(easymotion-bd-f)
+nmap <Leader>f <Plug>(easymotion-overwin-f)
+
+" s{char}{char} to move to {char}{char}
+nmap s <Plug>(easymotion-overwin-f2)
+
+if has('nvim')
 lua << EOF
 require('which-key').setup {
   layout = {
@@ -779,6 +792,7 @@ wk.register({
       t = { "TODOs" },
     },
     n = { "Reset highlighting" },
+    r = { "Easymotion" },
     t = {
       name = "TeX",
       t = { "pdflatex" },
