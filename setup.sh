@@ -15,6 +15,16 @@ fonts() {
   fi
 }
 
+# ============================== kitty-terminal
+kitty_terminal() {
+  echo "-- Installing kitty terminal"
+  if which kitty &> /dev/null
+  then
+    mkdir -p $HOME/.config/kitty
+    ln -fs $SCRIPT/terminals/kitty/* $HOME/.config/kitty/
+  fi
+}
+
 # ============================== gnome-terminal
 gnome_terminal() {
   # shortcuts
@@ -182,6 +192,7 @@ rust() {
 
 fonts
 gnome_terminal
+kitty_terminal
 vim
 shells
 tmux
