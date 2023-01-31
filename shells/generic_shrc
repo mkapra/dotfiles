@@ -59,3 +59,11 @@ eis() {
   md_without_ending=$(echo $md_name | cut -d '.' -f 1)
   docker run --rm -v "$(pwd):/latex" ghcr.io/mkapra/latex-docker:latest pandoc $md_name -o /latex/$md_without_ending.pdf --from markdown --template eisvogel --listings
 }
+
+# Sync kitty terminfo to ssh servers in ~/.ssh/servers
+sync_kitty_info() {
+  while read -r host; do
+    ssh $host mkdir -p \~/.terminfo/${TERM:0:1} < /dev/null
+    scp -q /usr/share/terminfo/${TERM:0:1}/$TERM $host:\~/.terminfo/${TERM:0:1}/
+  done < "$HOME/.ssh/servers"
+}
