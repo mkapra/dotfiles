@@ -183,6 +183,8 @@ endif
 
 set wildignore+=*/target/*,*docx*,*pdf* " Hide some files in e.g. :e
 " autocmd BufWritePre * :%s/\s\+$//e      " Remove trailing whitespaces
+:highlight ExtraWhitespace ctermbg=red guibg=red
+:match ExtraWhitespace /\s\+$/
 
 " ============================== Search
 set incsearch
