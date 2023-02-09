@@ -625,18 +625,6 @@ require('telescope').setup({
         mirror = true,
       }
     },
-    vimgrep_arguments = {
-      'rg',
-      '--color=never',
-      '--no-heading',
-      '--with-filename',
-      '--line-number',
-      '--column',
-      '--smart-case',
-      '--ignore-file',
-      '.gitignore'
-    },
-    file_ignore_patterns = { "pdf", "docx", "venv", ".git" }
   },
 })
 
@@ -688,7 +676,7 @@ map("n", "<leader>lt", "<cmd> TodoTelescope<CR>", default_opts)                 
 
 map("n", "<leader>bb", "<cmd> SidebarNvimToggle<CR>", default_opts)
 
-map("n", "<leader>ff", "<cmd> Telescope find_files hidden=true<CR>", default_opts)
+map("n", "<leader>ff", "<cmd> Telescope find_files<CR>", default_opts)
 map("n", "<leader>fg", "<cmd> Telescope live_grep<CR>", default_opts)
 map("n", "<leader>fb", "<cmd> Telescope buffers<CR>", default_opts)
 map("n", "<leader>fh", "<cmd> Telescope help_tags<CR>", default_opts)
