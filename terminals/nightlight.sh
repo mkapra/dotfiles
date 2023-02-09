@@ -31,6 +31,12 @@ change_profile() {
     xdotool windowfocus $active_window
 }
 
+ssh-add -L | grep 'The agent has no identities'
+if [ $? -eq 0 ]
+then
+  exit 1
+fi
+
 win_id_orig=$(xdotool getwindowfocus)
 # Check if option is "dark" or "light"
 if [ "$option" == "dark" ]; then
