@@ -11,7 +11,6 @@ autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
   \| PlugInstall --sync | source $MYVIMRC
 \| endif
 
-
 call plug#begin()
 if has ('mac')
   Plug 'github/copilot.vim'
@@ -60,7 +59,6 @@ if has('nvim')
   if has('nvim-0.8.0')
     Plug 'MunifTanjim/nui.nvim'                 " UI Component Library
     Plug 'folke/noice.nvim'
-    Plug 'rcarriga/nvim-notify'                 " fancy notifications
   endif
   "" Highlight todo comments
   "" requires: plenary
@@ -237,9 +235,11 @@ let g:auto_save_silent = 1	    " do not display the auto-save notification
 if has('nvim-0.8.0')
 lua << EOF
   require("noice").setup({
+    messages = {
+      view = "mini",
+    },
     presets = {
       bottom_search = true, -- use a classic bottom cmdline for search
-      command_palette = true, -- position the cmdline and popupmenu together
       long_message_to_split = true, -- long messages will be sent to a split
       lsp_doc_border = false, -- add a border to hover docs and signature help
     },
@@ -639,7 +639,6 @@ require('telescope').setup({
     file_ignore_patterns = { "pdf", "docx", "venv", ".git" }
   },
 })
-require("telescope").load_extension("noice")
 
 if vim.fn.has('nvim-0.7.2') == 1 then
   require('telescope').load_extension('dap')
