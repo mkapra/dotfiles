@@ -65,6 +65,7 @@ vim() {
   ln -fs $SCRIPT/editors/vimrc $HOME/.vimrc
   mkdir -p $HOME/.config/nvim
   ln -fs $SCRIPT/editors/vimrc $HOME/.config/nvim/init.vim
+  ln -fs $SCRIPT/editors/nvim/lua $HOME/.config/nvim/lua
 
   echo "-- Installing vim-plug"
   if which nvim &> /dev/null
