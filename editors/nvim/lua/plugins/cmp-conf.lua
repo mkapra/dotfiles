@@ -13,17 +13,11 @@ cmp.setup({
     end,
   },
   formatting = {
-    fields = {'menu', 'abbr', 'kind'},
-    format = function(entry, item)
-      local menu_icon = {
-        nvim_lsp = 'λ',
-        luasnip = '',
-        buffer = '﬘',
-        path = '',
-      }
-
-      item.menu = menu_icon[entry.source.name]
-      return item
+    -- Show icons in cmp box
+    format = function(_, vim_item)
+      local icons = require("icons").lspkind
+      vim_item.kind = string.format("%s %s", icons[vim_item.kind], vim_item.kind)
+      return vim_item
     end,
   },
   sources = {

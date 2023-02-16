@@ -24,6 +24,7 @@ return require('packer').startup(function(use)
   -- * Used for statusline
   use({
     'kyazdani42/nvim-web-devicons',
+    config = function() require('nvim-web-devicons').setup{ default=true } end,
   })
 
   -- LuaLine Statusline
@@ -96,11 +97,17 @@ return require('packer').startup(function(use)
   -- LSP
   -- Uses Mason for installing and configuring LSP. If version of nvim is lower
   -- than v0.7 then nvim-lspconfig and nvim-lsp-installer needs to be installed
+  --
+  -- Requires:
+  --   Rust tools
+  --   Commit 00e19d4b18a28ec8460dac373dffa5a49448ff6c for nvim version lower than
+  --   v0.8
   use({
     'williamboman/mason.nvim',
     requires = {
       { 'williamboman/mason-lspconfig.nvim' },
       { 'neovim/nvim-lspconfig' },
+      { 'simrat39/rust-tools.nvim' },
     },
     config = function() require('plugins.lsp-conf') end,
   })
@@ -108,13 +115,6 @@ return require('packer').startup(function(use)
   use({
     'SmiteshP/nvim-navic',
     config = function() require('nvim-navic').setup{} end,
-  })
-  -- Rust tools
-  -- Commit 00e19d4b18a28ec8460dac373dffa5a49448ff6c for nvim version lower than
-  -- v0.8
-  use({
-    'simrat39/rust-tools.nvim',
-    config = function() require('plugins.rust-tools-conf') end,
   })
   -- Debug Adapter Control
   use({
@@ -150,12 +150,6 @@ return require('packer').startup(function(use)
     'windwp/nvim-autopairs',
     config = function() require('nvim-autopairs').setup{} end,
   })
-
-  -- Show function signatures while typing
-  use {
-    'ray-x/lsp_signature.nvim',
-    config = function() require('plugins.lsp_signature-conf') end,
-  }
 
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins
