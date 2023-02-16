@@ -115,7 +115,6 @@ wk.register({
       t = { "TODOs" },
     },
     n = { "Reset highlighting" },
-    r = { "Easymotion" },
     t = {
       name = "TeX",
       t = { "pdflatex" },

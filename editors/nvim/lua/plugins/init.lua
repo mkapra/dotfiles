@@ -145,6 +145,12 @@ return require('packer').startup(function(use)
     config = function() require('plugins.cmp-conf') end,
   })
 
+  -- Automatic Brackets
+  use({
+    'windwp/nvim-autopairs',
+    config = function() require('nvim-autopairs').setup{} end,
+  })
+
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins
   if packer_bootstrap then

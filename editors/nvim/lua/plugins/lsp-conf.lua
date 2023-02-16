@@ -14,14 +14,14 @@ require("mason-lspconfig").setup {
       "pylsp",
       "solargraph",
       "texlab",
-      "rust-analyzer",
+      "rust_analyzer",
       "lua_ls",
     },
 }
 
 local lsp = require('lspconfig')
 print(lsp[0])
-local servers = { "pylsp", "sumneko_lua", "solargraph", "texlab", "lua-language-server" }
+local servers = { "pylsp", "solargraph", "texlab", "lua-language-server" }
 for _, i in ipairs(servers) do
   lsp[i].setup({
     on_attach = function(client, bufnr)
