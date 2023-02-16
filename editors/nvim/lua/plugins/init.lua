@@ -151,6 +151,12 @@ return require('packer').startup(function(use)
     config = function() require('nvim-autopairs').setup{} end,
   })
 
+  -- Show function signatures while typing
+  use {
+    'ray-x/lsp_signature.nvim',
+    config = function() require('plugins.lsp_signature-conf') end,
+  }
+
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins
   if packer_bootstrap then
