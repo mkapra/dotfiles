@@ -16,7 +16,7 @@ if has ('mac')
   Plug 'github/copilot.vim'
 endif
 
-if has('vim')
+if !has('nvim')
   Plug 'ctrlpvim/ctrlp.vim'               	" file finder
   Plug 'jiangmiao/auto-pairs'			" Automatic brackets
 endif
@@ -26,14 +26,16 @@ Plug 'edkolev/tmuxline.vim'             	" generate a theme for tmux `:TmuxlineS
 Plug 'frazrepo/vim-rainbow'
 Plug 'sainnhe/everforest'                       " Everforest colorscheme
 "" Airline for normal vim and tmuxline
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
+if !has('nvim')
+  Plug 'vim-airline/vim-airline'
+  Plug 'vim-airline/vim-airline-themes'
+endif
 
 " General plugins for (n)vim
 Plug 'jiangmiao/auto-pairs'                     " automatic brackets
 Plug 'tpope/vim-commentary'                     " commenting
 Plug 'tpope/vim-sleuth'                 	" heuristic file indendation
-Plug 'vim-scripts/vim-auto-save'                " Auto save files
+" Plug 'vim-scripts/vim-auto-save'                " Auto save files
 call plug#end()
 
 " ============================== Colors
@@ -43,17 +45,22 @@ if has('termguicolors')
   set termguicolors
 endif
 
+if filereadable(expand("$HOME") . "/.darkmode")
+    set background=dark
+else
+    set background=light
+endif
 " Switch to dark or light background dependent on existence of file
 " ~/.darkmode
-function! CheckDarkMode(timer)
-  if filereadable(expand("$HOME") . "/.darkmode")
-      set background=dark
-  else
-      set background=light
-  endif
-  call timer_start(5000, 'CheckDarkMode')
-endfunction
-call CheckDarkMode(0)
+" function! CheckDarkMode(timer)
+"   if filereadable(expand("$HOME") . "/.darkmode")
+"       set background=dark
+"   else
+"       set background=light
+"   endif
+"   call timer_start(5000, 'CheckDarkMode')
+" endfunction
+" call CheckDarkMode(0)
 
 syntax on
 let g:everforest_background = 'medium'
@@ -84,7 +91,7 @@ set backspace=indent,eol,start
 set wildmenu
 set scrolloff=5
 
-if has('vim')
+if !has('nvim')
   let g:ctrlp_show_hidden = 1           " show hidden files in ctrlp menus
 endif
 
@@ -115,12 +122,12 @@ let g:tmuxline_preset = {
       \'z'    : ['#S'],
       \'win'  : ['#I', '#W'],
       \'cwin' : ['#[fg=black,bold]#I', '#W'],
-      \'options' : {'status-justify' : 'centre'}}
+      \'options' : {'status-justify' : 'left'}}
 
 " ============================== Autosave
-let g:auto_save = 1		    " enable AutoSave on Vim startup
-let g:auto_save_in_insert_mode = 0  " do not save while in insert mode
-let g:auto_save_silent = 1	    " do not display the auto-save notification
+" let g:auto_save = 1		    " enable AutoSave on Vim startup
+" let g:auto_save_in_insert_mode = 0  " do not save while in insert mode
+" let g:auto_save_silent = 1	    " do not display the auto-save notification
 
 " ============================== nvim
 if has('nvim')

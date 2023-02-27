@@ -32,6 +32,7 @@ map("n", "<leader>ff", "<cmd> Telescope find_files<CR>", default_opts)
 map("n", "<leader>fg", "<cmd> Telescope live_grep<CR>", default_opts)
 map("n", "<leader>fb", "<cmd> Telescope buffers<CR>", default_opts)
 map("n", "<leader>fh", "<cmd> Telescope help_tags<CR>", default_opts)
+map("n", "<leader>fd", "<cmd> Telescope diagnostics<CR>", default_opts)
 
 if vim.fn.has('nvim-0.7') == 1 then
   map("n", "<leader>db", "<cmd> lua require'dap'.toggle_breakpoint()<CR>", default_opts)
@@ -75,6 +76,7 @@ wk.register({
     },
     f = {
       name = "Telescope",
+      d = { "Diagnostics" },
       f = { "Find files" },
       g = { "Grep" },
       b = { "Buffers" },
