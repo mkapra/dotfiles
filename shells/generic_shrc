@@ -14,7 +14,7 @@ then
   export SSH_AUTH_SOCK=/tmp/$USER.agent.sock
 fi
 
-[-f "$HOME/.cargo/env"] && . "$HOME/.cargo/env"
+[ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
 
 # ============================== Aliases
 alias g='git'
