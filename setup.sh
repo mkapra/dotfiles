@@ -62,22 +62,21 @@ gnome_terminal() {
 
 # ============================== vim
 vim() {
-  ln -fs $SCRIPT/editors/vimrc $HOME/.vimrc
-  mkdir -p $HOME/.config/nvim
-  ln -fs $SCRIPT/editors/vimrc $HOME/.config/nvim/init.vim
-  ln -fs $SCRIPT/editors/nvim/lua $HOME/.config/nvim/
+  if which vim &> /dev/null
+  then
+    ln -fs $SCRIPT/editors/vimrc $HOME/.vimrc
+    curl --silent -fLo ~/.vim/autoload/plug.vim --create-dirs \
+      https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  fi
 
   echo "-- Installing vim-plug"
   if which nvim &> /dev/null
   then
+    mkdir -p $HOME/.config/nvim
+    ln -fs $SCRIPT/editors/vimrc $HOME/.config/nvim/init.vim
+    ln -fs $SCRIPT/editors/nvim/lua $HOME/.config/nvim/
     sh -c 'curl --silent -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-  fi
-
-  if which vim &> /dev/null
-  then
-    curl --silent -fLo ~/.vim/autoload/plug.vim --create-dirs \
-      https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
   fi
 
   echo 'Do not forget to launch (n)vim and install all the plugins'
