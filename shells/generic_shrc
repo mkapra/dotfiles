@@ -1,9 +1,9 @@
 # ============================== Environment Variables
 if which nvim &> /dev/null
 then
-	export EDITOR=nvim
+  export EDITOR=nvim
 else
-	export EDITOR=vim
+  export EDITOR=vim
 fi
 export LC_ALL=en_US.UTF-8
 export LC_MESSAGES=en_US.UTF-8
@@ -14,10 +14,7 @@ then
   export SSH_AUTH_SOCK=/tmp/$USER.agent.sock
 fi
 
-if [ -f "$HOME/.cargo/env" ]
-then
-  . "$HOME/.cargo/env"
-fi
+[-f "$HOME/.cargo/env"] && . "$HOME/.cargo/env"
 
 # ============================== Aliases
 alias g='git'
@@ -27,15 +24,15 @@ alias lz='lazygit'
 # ============================== Colors
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
-    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-    alias ls='ls --color=auto'
-    alias ll='ls -alF'
-    alias la='ls -A'
-    alias l='ls -CF'
+  test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+  alias ls='ls --color=auto'
+  alias ll='ls -alF'
+  alias la='ls -A'
+  alias l='ls -CF'
 
-    alias grep='grep --color=auto'
-    alias fgrep='fgrep --color=auto'
-    alias egrep='egrep --color=auto'
+  alias grep='grep --color=auto'
+  alias fgrep='fgrep --color=auto'
+  alias egrep='egrep --color=auto'
 fi
 
 # ============================== tmux
@@ -54,15 +51,22 @@ fi
 # Builds a given latex file with latexmk in a docker container
 tex() {
   tex_name=$1
-  docker run -v "$(pwd):/latex" --rm ghcr.io/mkapra/latex-docker:latest latexmk $tex_name
-  docker run -v "$(pwd):/latex" --rm ghcr.io/mkapra/latex-docker:latest latexmk -c $tex_name
+  docker run --rm -v "$(pwd):/latex" ghcr.io/mkapra/latex-docker:latest latexmk $tex_name
+  docker run --rm -v "$(pwd):/latex" ghcr.io/mkapra/latex-docker:latest latexmk -c $tex_name
 }
 
 # Builds a given markdown file with the eisvogel theme in a docker container
 eis() {
   md_name=$1
   md_without_ending=$(echo $md_name | cut -d '.' -f 1)
-  docker run --rm -v "$(pwd):/latex" ghcr.io/mkapra/latex-docker:latest pandoc $md_name -o /latex/$md_without_ending.pdf --from markdown --template eisvogel --listings
+  docker run --rm -v "$(pwd):/latex" \
+    ghcr.io/mkapra/latex-docker:latest \
+    pandoc \
+    $md_name \
+    -o /latex/$md_without_ending.pdf \
+    --from markdown \
+    --template eisvogel \
+    --listings
 }
 
 # Sync kitty terminfo to ssh servers in ~/.ssh/servers

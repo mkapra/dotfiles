@@ -15,10 +15,6 @@ HISTSIZE=1000
 HISTCONTROL=ignoreboth
 HISTFILESIZE=2000
 
-# check the window size after each command and, if necessary,
-# update the values of LINES and COLUMNS.
-shopt -s checkwinsize
-
 # ============================== Shortcuts
 set -o vi
 # Bind C-f to the fg command to be able to bring a background command to the
@@ -46,20 +42,21 @@ parse_git_dir() {
 # Get different PS1's for different exit codes
 PROMPT_COMMAND=__prompt_command
 __prompt_command() {
-  EXIT=$?
-  id | grep root &> /dev/null
+  exit_code=$?
+  is_root=id | grep root &> /dev/null
+
   if [ $? -eq 0 ]
   then
-    PS1='\e[31m\h\e[0m \w '
+    PS1='\[\e[31m\]\h\[\e[0m\] \w '
   else
-    PS1='\e[33m\h\e[0m \w '
+    PS1='\[\e[33m\]\h\[\e[0m\] \w '
   fi
   PS1+='\[\033[0;36m\]$(parse_git_dir)\[\033[00m\]'
 
-  local red_lambda='\e[0;31mλ\e[0m '
-  local green_lambda='\e[0;32mλ\e[0m '
+  local red_lambda='\[\e[0;31m\]λ\[\e[0m\] '
+  local green_lambda='\[\e[0;32m\]λ\[\e[0m\] '
 
-  if [ $EXIT -ne 0 ]
+  if [ $exit_code -ne 0 ]
   then
     PS1+=$red_lambda
   else
