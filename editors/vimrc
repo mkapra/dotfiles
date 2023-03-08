@@ -36,6 +36,8 @@ Plug 'jiangmiao/auto-pairs'                     " automatic brackets
 Plug 'tpope/vim-commentary'                     " commenting
 Plug 'tpope/vim-sleuth'                 	" heuristic file indendation
 " Plug 'vim-scripts/vim-auto-save'                " Auto save files
+
+Plug 'terrastruct/d2-vim'
 call plug#end()
 
 " ============================== Colors
