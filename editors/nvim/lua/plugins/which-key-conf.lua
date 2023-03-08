@@ -24,7 +24,6 @@ map("n", "<leader>lf", "<cmd> lua vim.lsp.buf.format {async = true }<CR>", defau
 map("n", "<leader>lh", "<cmd> lua vim.lsp.buf.hover()<CR>", default_opts)         -- Show info of symbol (double tap to enter)
 map("n", "<leader>lb", "<cmd> Telescope lsp_references<CR>", default_opts)        -- Show all LSP references
 map("n", "<leader>ls", "<cmd> Telescope lsp_workspace_symbols<CR>", default_opts) -- Search for LSP symbols
-map("n", "<leader>lt", "<cmd> TodoTelescope<CR>", default_opts)                   -- Search for LSP symbols^
 
 map("n", "<leader>bb", "<cmd> SidebarNvimToggle<CR>", default_opts)
 
@@ -33,6 +32,7 @@ map("n", "<leader>fg", "<cmd> Telescope live_grep<CR>", default_opts)
 map("n", "<leader>fb", "<cmd> Telescope buffers<CR>", default_opts)
 map("n", "<leader>fh", "<cmd> Telescope help_tags<CR>", default_opts)
 map("n", "<leader>fd", "<cmd> Telescope diagnostics<CR>", default_opts)
+map("n", "<leader>ft", "<cmd> TodoTelescope<CR>", default_opts)                   -- Search for LSP symbols^
 
 if vim.fn.has('nvim-0.7') == 1 then
   map("n", "<leader>db", "<cmd> lua require'dap'.toggle_breakpoint()<CR>", default_opts)
@@ -76,11 +76,12 @@ wk.register({
     },
     f = {
       name = "Telescope",
+      b = { "Buffers" },
       d = { "Diagnostics" },
       f = { "Find files" },
       g = { "Grep" },
-      b = { "Buffers" },
       h = { "Help Tags" },
+      t = { "TODOs" },
     },
     d = {
       name = "Debug",
@@ -114,7 +115,6 @@ wk.register({
       r = { "(Re)Name symbol" },
       r = { "References" },
       s = { "Symbols" },
-      t = { "TODOs" },
     },
     n = { "Reset highlighting" },
     t = {
