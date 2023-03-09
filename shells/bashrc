@@ -29,7 +29,7 @@ bind '"\C-l": clear-screen'
 parse_git_dir() {
   if $(git rev-parse --git-dir > /dev/null 2>&1)
   then
-    local branch_name=$(git branch|grep "^*"|cut -d ' ' -f2)
+    local branch_name=$(git branch|grep "^\*"|cut -d ' ' -f2)
     if [[ $(git status 2> /dev/null | tail -n1) != "nothing to commit, working tree clean" ]]
     then
       branch_name+='*'
