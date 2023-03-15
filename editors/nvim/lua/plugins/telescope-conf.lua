@@ -3,11 +3,12 @@ require('telescope').setup({
     prompt_prefix = "   ",
     selection_caret = "  ",
     entry_prefix = "  ",
+    windblend = 15,
+    file_ignore_patterns = { "^.git/" },
     sorting_strategy = "ascending",
-    layout_strategy = "vertical",
     layout_config = {
       vertical = {
-        width = 120,
+        width = 140,
         prompt_position = "top",
         mirror = true,
       }

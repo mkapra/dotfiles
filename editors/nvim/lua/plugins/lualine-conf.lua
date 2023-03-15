@@ -76,22 +76,6 @@ require('lualine').setup({
     -- lualine comes with 'everforest' theme
     theme = 'everforest',
   },
-  tabline = {
-    lualine_a = {
-      {
-        'tabs',
-        max_length = vim.o.columns / 3,
-        mode = 2,
-      }
-    },
-    lualine_b = {},
-    lualine_c = {},
-    lualine_x = {
-      require('nvim-navic').get_location
-    },
-    lualine_y = {},
-    lualine_z = {}
-  },
   -- all sections from left to right
   sections = {
     lualine_a = {
