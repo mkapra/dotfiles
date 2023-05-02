@@ -3,72 +3,58 @@
 run-shell 'tmux setenv -g TMUX_VERSION $(tmux -V | \
                            sed -En "s/^tmux[^0-9]*([.0-9]+).*/\1/p")'
 
-# faster key repitition
-set -g escape-time 0
-
-setw -g mode-keys vi
-
-# First window has index 1
-set -g base-index 1
-# Renumber windows when closing one
-set-option -g renumber-windows on
-
-# Mouse settings
 set -g mouse on
-# make escape bindings of programs work in tmux
-set -s escape-time 5
 
-set -g status-position bottom
+set -g default-terminal "screen-256color"
+set -ga terminal-overrides ",*256col*:Tc"
 
 if-shell -b '[ "$(echo "$TMUX_VERSION >= 3.3" | bc)" = 1 ]' {
   set -g pane-border-indicators arrows
 }
 
-# -------------------- Clipboard
-# copy to system clipboard
-bind C-c run "tmux save-buffer - | xclip -i -sel clipboard"
-# paste from system clipboard
-bind C-v run "tmux set-buffer \"$(xclip -o -sel clipboard)\"; tmux paste-buffer"
+# Start windows and panes at 1, not 0
+set -g base-index 1
+set -g pane-base-index 1
+set-window-option -g pane-base-index 1
+set-option -g renumber-windows on
 
-# -------------------- Keyboard shortcuts
-# navigate windows
-bind-key -n M-1 select-window -t 1
-bind-key -n M-2 select-window -t 2
-bind-key -n M-3 select-window -t 3
-bind-key -n M-4 select-window -t 4
-bind-key -n M-5 select-window -t 5
-bind-key -n M-6 select-window -t 6
-bind-key -n M-7 select-window -t 7
-bind-key -n M-8 select-window -t 8
-bind-key -n M-9 select-window -t 9
+# -------------------- Shortcuts
+bind -n M-H next-window
+bind -n M-L previous-window
 
-# swap panes
-bind-key -n 'M-[' swap-pane -D
-bind-key -n 'M-]' swap-pane -U
+bind-key r source-file ~/.config/tmux/tmux.conf \; display-message "tmux.conf reloaded"
 
-bind-key -n 'M-t' command-prompt -p "Send pane to:" "join-pane -t :'%%'"
-bind-key -n 'M-v' select-layout even-horizontal
-bind-key -n 'M-s' select-layout even-vertical
-
-# pane selection
-bind-key -n M-h select-pane -L
-bind-key -n M-j select-pane -D
-bind-key -n M-k select-pane -U
-bind-key -n M-l select-pane -R
+bind '"' split-window -v -c "#{pane_current_path}"
+bind % split-window -h -c "#{pane_current_path}"
 
 # Get urls of current tmux buffer
 bind-key u capture-pane \; save-buffer ~/tmp/tmux-buffer \; split-window -l 10 "urlview ~/tmp/tmux-buffer"
 
-bind-key -n M-Left select-pane -L
-bind-key -n M-Down select-pane -D
-bind-key -n M-Up select-pane -U
-bind-key -n M-Right select-pane -R
-
 # -------------------- Colors
-set -g default-terminal "screen-256color"
-# enable true color terminal
-set -ga terminal-overrides ",*256col*:Tc"
 
-# using https://github.com/edkolev/tmuxline.vim
-# open vim, `:TmuxLineSnapshot`, save to ~/.tmux.theme
-if-shell "test -f ~/.tmux.theme" "source ~/.tmux.theme"
+set -g @default '#dfddc8'
+set -g @red '#f85552'
+set -g @black '#1e1e2e'
+set -g @blue '#3a94c5'
+
+# -------------------- Theme
+set -g status 'on'
+set -g status-bg '#dfddc8'
+
+set -g status-left ''
+set -g status-right ''
+
+set-option -g pane-border-style 'fg=#{@default},bg=default'
+set-option -g pane-active-border-style 'fg=#{@default},bg=default'
+
+setw -g window-status-separator ''
+setw -g window-status-style ''
+setw -g window-status-format '#[fg=#{@black},bg=#{@blue}] #I #[bg=#{@default}] #{b:pane_current_path} '
+setw -g window-status-current-format '#[fg=#{@black},bg=#{@red}] #I #[bg=#{@default}] #{b:pane_current_path} '
+
+# -------------------- Plugins
+set -g @plugin 'tmux-plugins/tpm'
+set -g @plugin 'tmux-plugins/tmux-sensible'
+set -g @plugin 'christoomey/vim-tmux-navigator'
+
+run '~/.tmux/plugins/tpm/tpm'

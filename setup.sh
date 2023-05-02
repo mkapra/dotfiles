@@ -108,8 +108,12 @@ tmux() {
   if which tmux &> /dev/null
   then
     echo '-- Setting up tmux'
-    ln -fs $SCRIPT/tmux/theme $HOME/.tmux.theme
-    ln -fs $SCRIPT/tmux/config $HOME/.tmux.conf
+    if [[ ! -d $HOME/.tmux/plugins/tpm ]]
+    then
+      git clone https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm
+    fi
+    mkdir -p $HOME/.config/tmux
+    ln -fs $SCRIPT/tmux/config $HOME/.config/tmux/tmux.conf
   fi
 }
 

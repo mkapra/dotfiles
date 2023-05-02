@@ -37,6 +37,8 @@ Plug 'tpope/vim-commentary'                     " commenting
 Plug 'tpope/vim-sleuth'                 	" heuristic file indendation
 " Plug 'vim-scripts/vim-auto-save'                " Auto save files
 
+Plug 'christoomey/vim-tmux-navigator'
+
 Plug 'terrastruct/d2-vim'
 call plug#end()
 
