@@ -3,7 +3,7 @@
 SCRIPT=$(dirname -- "$( readlink -f -- "$0"; )";)
 
 # ============================== Fonts
-fonts() {
+install_fonts() {
   echo "-- Installing required fonts"
   # Install fonts on local machines only. The simplest way to do this is
   # checking for a gnome-terminal application
@@ -16,7 +16,7 @@ fonts() {
 }
 
 # ============================== kitty-terminal
-kitty_terminal() {
+install_kitty_terminal() {
   echo "-- Installing kitty terminal"
   if which kitty &> /dev/null
   then
@@ -27,7 +27,7 @@ kitty_terminal() {
 }
 
 # ============================== gnome-terminal
-gnome_terminal() {
+install_gnome_terminal() {
   # shortcuts
   shortcuts() {
     if which gnome-terminal &> /dev/null
@@ -61,7 +61,7 @@ gnome_terminal() {
 }
 
 # ============================== vim
-vim() {
+install_vim() {
   if which vim &> /dev/null
   then
     ln -fs $SCRIPT/editors/vimrc $HOME/.vimrc
@@ -83,7 +83,7 @@ vim() {
 }
 
 # ============================== shells
-shells() {
+install_shells() {
   echo '-- Setting up shells'
   ln -fs $SCRIPT/shells/generic_shrc $HOME/.generic_shrc
 
@@ -104,21 +104,20 @@ shells() {
 }
 
 # ============================== tmux
-tmux() {
+install_tmux() {
   if which tmux &> /dev/null
   then
     echo '-- Setting up tmux'
-    if [[ ! -d $HOME/.tmux/plugins/tpm ]]
-    then
-      git clone https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm
-    fi
+    mkdir -p $HOME/.tmux/plugins
+    [ ! -d $HOME/.tmux/plugins/tpm ] && \
+      git clone -q https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm
     mkdir -p $HOME/.config/tmux
     ln -fs $SCRIPT/tmux/config $HOME/.config/tmux/tmux.conf
   fi
 }
 
 # ============================== git
-git() {
+install_git() {
   if which git &> /dev/null
   then
     echo '-- Setting up git'
@@ -141,7 +140,7 @@ git() {
 }
 
 # ============================== Mail
-mail() {
+install_mail() {
   if which mutt &> /dev/null
   then
     echo '-- Setting up mutt'
@@ -164,7 +163,7 @@ mail() {
 }
 
 # ============================== Rust Tools
-rust() {
+install_rust() {
   if which cargo &> /dev/null
   then
     tools=('exa' 'rg')
@@ -195,12 +194,12 @@ rust() {
   fi
 }
 
-fonts
-gnome_terminal
-kitty_terminal
-vim
-shells
-tmux
-git
-mail
-rust
+install_fonts
+install_gnome_terminal
+install_kitty_terminal
+install_vim
+install_shells
+install_tmux
+install_git
+install_mail
+install_rust
