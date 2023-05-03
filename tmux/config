@@ -32,14 +32,14 @@ bind-key u capture-pane \; save-buffer ~/tmp/tmux-buffer \; split-window -l 10 "
 
 # -------------------- Colors
 
-set -g @default '#dfddc8'
+set -g @default '#f4f0d9'
 set -g @red '#f85552'
 set -g @black '#1e1e2e'
 set -g @blue '#3a94c5'
 
 # -------------------- Theme
 set -g status 'on'
-set -g status-bg '#dfddc8'
+set -g status-bg '#f4f0d9'
 
 set -g status-left ''
 set -g status-right ''
