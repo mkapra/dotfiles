@@ -33,9 +33,11 @@ bind-key u capture-pane \; save-buffer ~/tmp/tmux-buffer \; split-window -l 10 "
 # -------------------- Colors
 
 set -g @default '#f4f0d9'
+set -g @grayI '#a6b0a0'
+set -g @gray '#5c6a72'
 set -g @red '#f85552'
 set -g @black '#1e1e2e'
-set -g @blue '#3a94c5'
+set -g @blue '#efebd4'
 
 # -------------------- Theme
 set -g status 'on'
@@ -47,10 +49,10 @@ set -g status-right ''
 set-option -g pane-border-style 'fg=#{@default},bg=default'
 set-option -g pane-active-border-style 'fg=#{@default},bg=default'
 
-setw -g window-status-separator ''
+setw -g window-status-separator ' / '
 setw -g window-status-style ''
-setw -g window-status-format '#[fg=#{@black},bg=#{@blue}] #I #[bg=#{@default}] #{b:pane_current_path} '
-setw -g window-status-current-format '#[fg=#{@black},bg=#{@red}] #I #[bg=#{@default}] #{b:pane_current_path} '
+setw -g window-status-format '#[fg=#{@grayI},bg=#{@default}] #I #[fg=#{@gray},bg=#{@default}] #{b:pane_current_path} '
+setw -g window-status-current-format '#[fg=#{@black},bg=#{@red}] #I #[fg=#{@gray},bg=#{@default},bold] #{b:pane_current_path} '
 
 # -------------------- Plugins
 set -g @plugin 'tmux-plugins/tpm'
