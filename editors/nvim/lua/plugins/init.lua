@@ -27,10 +27,10 @@ return require('packer').startup(function(use)
     config = function() require('nvim-web-devicons').setup{ default=true } end,
   })
 
-  -- LuaLine Statusline
+  -- Statusline
   use({
-    'nvim-lualine/lualine.nvim',
-    config = function() require('plugins.lualine-conf') end,
+    'tamton-aquib/staline.nvim',
+    config = function() require('plugins.staline-conf') end,
   })
 
   -- Noice
