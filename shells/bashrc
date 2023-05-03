@@ -15,16 +15,6 @@ HISTSIZE=1000
 HISTCONTROL=ignoreboth
 HISTFILESIZE=2000
 
-# ============================== Shortcuts
-set -o vi
-# Bind C-f to the fg command to be able to bring a background command to the
-# foreground faster
-bind -x '"\C-f":"fg"'
-bind '"\C-n":yank-last-arg'
-bind '"\C-a":beginning-of-line'
-bind '"\C-e":end-of-line'
-bind '"\C-l": clear-screen'
-
 # ============================== Functions
 parse_git_dir() {
   if $(git rev-parse --git-dir > /dev/null 2>&1)
