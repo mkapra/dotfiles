@@ -13,72 +13,71 @@ if fn.empty(fn.glob(install_path)) > 0 then
     'https://github.com/wbthomason/packer.nvim',
     install_path
   })
-  end
+end
 
+-- Only required if you have packer configured as `opt`
+vim.cmd [[packadd packer.nvim]]
 
 return require('packer').startup(function(use)
   -- Packer can manage itself
   use 'wbthomason/packer.nvim'
 
-  -- Devicons
-  -- * Used for statusline
-  use({
-    'kyazdani42/nvim-web-devicons',
-    config = function() require('nvim-web-devicons').setup{ default=true } end,
-  })
+  use {
+    'nvim-treesitter/nvim-treesitter',
+    run = ':TSUpdate',
+    config = function() require('plugins.treesitter-conf') end,
+  }
 
-  -- LuaLine Statusline
-  use({
-    'nvim-lualine/lualine.nvim',
-    config = function() require('plugins.lualine-conf') end,
-  })
+  -- Colorscheme
+  use {
+    'rose-pine/neovim',
+    as = 'rose-pine',
+    config = function()
+      vim.cmd('colorscheme rose-pine')
+    end,
+  }
 
-  -- Noice
-  use({
-    'folke/noice.nvim',
-    requires = {
-      { 'MunifTanjim/nui.nvim' },
-    },
-    config = function() require('plugins.noice-conf') end,
-  })
+  -- use {
+  --   'mbbill/undotree',
+  --   config = function()
+  --     vim.keymap.set('n', '<leader>u', vim.cmd.UndotreeToggle)
+  --   end
+  -- }
 
-  -- Some lua functions
-  use({
-    'nvim-lua/plenary.nvim',
-  })
-
-  -- Highlight ToDo comments
-  use({
+  -- Highlight TODO comments
+  use {
     'folke/todo-comments.nvim',
     requires = {
       { 'nvim-lua/plenary.nvim' },
     },
-    config = function() require('plugins.todo-conf') end,
+    config = function() require("todo-comments").setup() end,
+  }
+
+  -- Commenting
+  use {
+    'terrortylor/nvim-comment',
+    config = function() require('nvim_comment').setup() end,
+  }
+
+  use {
+    'nmac427/guess-indent.nvim',
+    config = function() require('guess-indent').setup {} end,
+  }
+
+  -- Automatic Brackets
+  use({
+    'windwp/nvim-autopairs',
+    config = function() require('nvim-autopairs').setup{} end,
   })
 
-  -- lazygit
-  use({
-    'kdheepak/lazygit.nvim'
-  })
-
-  -- Telescope
-  -- * If nvim version is 0.5 then branch nvim-0.5.0 is necessary
-  use({
-    'nvim-telescope/telescope.nvim',
+  -- Nicer messages and commandline
+  use {
+    "folke/noice.nvim",
     requires = {
-      { 'nvim-lua/plenary.nvim' },
-      { 'nvim-telescope/telescope-symbols.nvim' },
-      { 'nvim-telescope/telescope-dap.nvim' },
+      "MunifTanjim/nui.nvim",
     },
-    config = function() require('plugins.telescope-conf') end,
-  })
-
-  -- Treesitter
-  -- If version 0.5 is used branch '0.5-compat' is necessary
-  use({
-    'nvim-treesitter/nvim-treesitter',
-    config = function() require('plugins.treesitter-conf') end,
-  })
+    config = function() require('plugins.noice-conf') end,
+  }
 
   -- Gitsigns
   -- * Git decorations for buffer
@@ -87,81 +86,53 @@ return require('packer').startup(function(use)
     config = function() require('gitsigns').setup{} end,
   })
 
-  -- which-key
-  -- Display possible keybindings
-  use({
-    'folke/which-key.nvim',
-    config = function() require('plugins.which-key-conf') end,
-  })
+  use {
+    'nvim-telescope/telescope.nvim',
+    tag = '0.1.1',
+    requires = {
+      { 'nvim-lua/plenary.nvim' }
+    },
+    config = function() require('plugins.telescope-conf') end,
+  }
 
   -- LSP
-  -- Uses Mason for installing and configuring LSP. If version of nvim is lower
-  -- than v0.7 then nvim-lspconfig and nvim-lsp-installer needs to be installed
-  --
-  -- Requires:
-  --   Rust tools
-  --   Commit 00e19d4b18a28ec8460dac373dffa5a49448ff6c for nvim version lower than
-  --   v0.8
-  use({
-    'williamboman/mason.nvim',
+  use {
+    'VonHeikemen/lsp-zero.nvim',
     requires = {
-      { 'williamboman/mason-lspconfig.nvim' },
-      { 'neovim/nvim-lspconfig' },
-      { 'simrat39/rust-tools.nvim' },
+      -- LSP Support
+      {'neovim/nvim-lspconfig'},
+      {
+        'williamboman/mason.nvim',
+        run = ':MasonUpdate',
+      },
+      {'williamboman/mason-lspconfig.nvim'},
+
+      -- Autocompletion
+      {'hrsh7th/nvim-cmp'},
+      {'hrsh7th/cmp-nvim-lsp'},
+      {'L3MON4D3/LuaSnip'},
+
+      -- More speficic language support
+      {'simrat39/rust-tools.nvim'},
     },
     config = function() require('plugins.lsp-conf') end,
-  })
-  -- Breadcrumbs
-  use({
-    'SmiteshP/nvim-navic',
-    config = function() require('nvim-navic').setup{} end,
-  })
-  -- Debug Adapter Control
-  use({
-    'mfussenegger/nvim-dap',
-    requires = {
-      { 'rcarriga/nvim-dap-ui' },
-    },
-    config = function() require('plugins.dap-conf') end,
-  })
+  }
 
-  -- Snippets
-  -- LuaSnip
-  use({
-    'L3MON4D3/LuaSnip',
-    requires = {
-      { 'rafamadriz/friendly-snippets' }, -- Source: JSON style snippets for LuaSnip
-      { 'saadparwaiz1/cmp_luasnip' },     -- Make LuaSnip work with cmp
-    },
-  })
-  -- Completion engine
-  use({
-    'hrsh7th/nvim-cmp',
-    requires = {
-      'hrsh7th/cmp-buffer',   -- Source: buffer
-      'hrsh7th/cmp-nvim-lsp', -- Source: LSP symbols
-      'hrsh7th/cmp-path',     -- Source: filepaths
-    },
-    config = function() require('plugins.cmp-conf') end,
-  })
+  -- Statusline
+  use 'kyazdani42/nvim-web-devicons'
+  use {
+    'nvim-lualine/lualine.nvim',
+    -- requires = { 'nvim-tree/nvim-web-devicons', opt = true },
+    config = function() require('plugins.lualine-conf') end,
+  }
 
-  -- Automatic Brackets
-  use({
-    'windwp/nvim-autopairs',
-    config = function() require('nvim-autopairs').setup{} end,
-  })
-
-  -- Automatically set up your configuration after cloning packer.nvim
-  -- Put this at the end after all plugins
-  if packer_bootstrap then
-    require('packer').sync()
-  end
+  -- Keybindings helper
+  use {
+    "folke/which-key.nvim",
+    config = function()
+      vim.o.timeout = true
+      vim.o.timeoutlen = 300
+      require("which-key").setup {}
+    end
+  }
 end)
-
---   Plug 'mortepau/codicons.nvim'
-
---   " Dev Container for VS Code
---   if has('nvim-0.7.0')
---     Plug 'esensar/nvim-dev-container'
---   endif
---   require("devcontainer").setup{}

@@ -77,14 +77,11 @@ vim() {
       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
   fi
 
-  echo "-- Installing vim-plug"
+  echo "-- Configure nvim"
   if which nvim &> /dev/null
   then
     mkdir -p $HOME/.config/nvim
-    ln -fs $SCRIPT/editors/vimrc $HOME/.config/nvim/init.vim
-    ln -fs $SCRIPT/editors/nvim/lua $HOME/.config/nvim/
-    sh -c 'curl --silent -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
-      https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+    ln -fs $SCRIPT/editors/nvim/* $HOME/.config/nvim/
   fi
 
   echo 'Do not forget to launch (n)vim and install all the plugins'
