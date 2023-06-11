@@ -21,8 +21,16 @@ kitty_terminal() {
   if which kitty &> /dev/null
   then
     mkdir -p $HOME/.config/kitty
-    ln -fs $SCRIPT/terminals/kitty/* $HOME/.config/kitty/
+    ln -fs $SCRIPT/terminals/kitty/kitty.conf $HOME/.config/kitty/
     ln -fs $SCRIPT/terminals/nightlight.sh $HOME/.local/bin/
+
+    ln -fs $SCRIPT/submodules/kitty-rose-pine-theme/dist/rose-pine* $HOME/.config/kitty/
+    ln -fs $SCRIPT/submodules/kitty-rose-pine-theme/icons/rose-pine-terminal-icon.png $HOME/.config/kitty/kitty.app.png
+
+    if [[ "$(uname -a)" == *"Darwin"* ]]
+    then
+        rm /var/folders/*/*/*/com.apple.dock.iconcache; killall Dock
+    fi
   fi
 }
 
