@@ -22,7 +22,6 @@ if !has('nvim')
 endif
 
 " Appearance
-Plug 'edkolev/tmuxline.vim'             	" generate a theme for tmux `:TmuxlineSnapshot ~/.tmux.theme`
 Plug 'frazrepo/vim-rainbow'
 Plug 'sainnhe/everforest'                       " Everforest colorscheme
 "" Airline for normal vim and tmuxline
@@ -117,16 +116,9 @@ let &t_SR = "\<Esc>[4 q"
 let &t_EI = "\<Esc>[2 q"
 
 " ============================== Statusline
-set laststatus=1                      " 1: only if there are at least two windows
-set showtabline=1                     " 1: only if there are at least two tab pages
+set laststatus=3
+set showtabline=2
 let g:airline_powerline_fonts = 1
-
-let g:tmuxline_preset = {
-      \'a'    : ['#H'],
-      \'z'    : ['#S'],
-      \'win'  : ['#I', '#W'],
-      \'cwin' : ['#[fg=black,bold]#I', '#W'],
-      \'options' : {'status-justify' : 'left'}}
 
 " ============================== Autosave
 " let g:auto_save = 1		    " enable AutoSave on Vim startup
