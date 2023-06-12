@@ -1,21 +1,16 @@
-require('telescope').setup({
-  defaults = {
-    prompt_prefix = "   ",
-    selection_caret = "  ",
-    entry_prefix = "  ",
-    windblend = 15,
-    file_ignore_patterns = { "^.git/" },
-    sorting_strategy = "ascending",
-    layout_config = {
-      vertical = {
-        width = 140,
-        prompt_position = "top",
-        mirror = true,
-      }
-    },
-  },
-})
+local wk = require("which-key")
 
-if vim.fn.has('nvim-0.7.2') == 1 then
-  require('telescope').load_extension('dap')
-end
+local builtin = require('telescope.builtin')
+vim.keymap.set('n', '<leader>ff', builtin.find_files, {})
+vim.keymap.set('n', '<C-p>', builtin.git_files, {})
+vim.keymap.set('n', '<leader>fg', builtin.live_grep, {})
+vim.keymap.set('n', '<leader>fb', builtin.buffers, {})
+
+wk.register({
+  f = {
+    name = "Telescope",
+    f = "Find File",
+    g = "Grep",
+    b = "Buffers",
+  },
+}, { prefix = "<leader>" })
