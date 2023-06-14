@@ -9,26 +9,12 @@ option=$1
 
 # Function to change the profile of all open kitty-terminal windows
 change_profile() {
-    ln -fs $HOME/.config/kitty/"everforest-$1-medium-theme.conf" $HOME/.config/kitty/current-theme.conf
-
-    # Find all kitty windows
-    window_ids=$(xdotool search --class "kitty")
-
-    # Loop through each window
-    active_window=$(xdotool getactivewindow)
-    for window_id in $window_ids
+    ln -fs $HOME/.config/kitty/"rose-pine-$1.conf" $HOME/.config/kitty/current-theme.conf
+    files="/tmp/kitty-$USER-*"
+    for instance in $files
     do
-      # Focus on the window
-      xdotool windowfocus $window_id
-
-      # Check if the window still exists
-      if xdotool getactivewindow &>/dev/null
-      then
-	# Send the command to reload the config file
-	xdotool key ctrl+shift+F5
-      fi
+        kitty @ --to "unix:$instance" set-colors --all --configured $HOME/.config/kitty/kitty.conf
     done
-    xdotool windowfocus $active_window
 }
 
 ssh-add -L | grep 'The agent has no identities'
@@ -40,16 +26,18 @@ fi
 win_id_orig=$(xdotool getwindowfocus)
 # Check if option is "dark" or "light"
 if [ "$option" == "dark" ]; then
-    dconf write /org/gnome/terminal/legacy/profiles:/default "'$dark_profile'"
-    change_profile dark
+    # dconf write /org/gnome/terminal/legacy/profiles:/default "'$dark_profile'"
+    change_profile moon
+    exit
 
     touch $HOME/.darkmode
     while read -r host; do
       scp -q .darkmode $host:~
     done < "$HOME/.ssh/servers"
 elif [ "$option" == "light" ]; then
-    dconf write /org/gnome/terminal/legacy/profiles:/default "'$light_profile'"
-    change_profile light
+    # dconf write /org/gnome/terminal/legacy/profiles:/default "'$light_profile'"
+    change_profile dawn
+    exit
 
     rm $HOME/.darkmode
     while read -r host; do
