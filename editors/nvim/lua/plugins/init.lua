@@ -37,6 +37,11 @@ return require('packer').startup(function(use)
     end,
   }
 
+  use {
+    'folke/zen-mode.nvim',
+    config = function() require('plugins.zenmode-conf') end,
+  }
+
   -- use {
   --   'mbbill/undotree',
   --   config = function()
