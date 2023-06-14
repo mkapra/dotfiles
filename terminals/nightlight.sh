@@ -28,7 +28,6 @@ win_id_orig=$(xdotool getwindowfocus)
 if [ "$option" == "dark" ]; then
     # dconf write /org/gnome/terminal/legacy/profiles:/default "'$dark_profile'"
     change_profile moon
-    exit
 
     touch $HOME/.darkmode
     while read -r host; do
@@ -37,7 +36,6 @@ if [ "$option" == "dark" ]; then
 elif [ "$option" == "light" ]; then
     # dconf write /org/gnome/terminal/legacy/profiles:/default "'$light_profile'"
     change_profile dawn
-    exit
 
     rm $HOME/.darkmode
     while read -r host; do

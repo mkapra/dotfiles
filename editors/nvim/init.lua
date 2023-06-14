@@ -37,7 +37,13 @@ require('plugins')
 
 -- Colors
 function ColorMyPencils(color)
-  vim.o.background = "light"
+  local file_exists = io.open(os.getenv("HOME") .. '/.darkmode', "r") ~= nil
+  if file_exists
+  then
+    vim.o.background = "dark"
+  else
+    vim.o.background = "light"
+  end
   color = color or "rose-pine"
   vim.cmd.colorscheme(color)
 end
