@@ -1,4 +1,3 @@
-require'nvim-web-devicons'.setup()
 local function showLsp()
   local msg = 'No Lsp'
   local buf_ft = vim.api.nvim_buf_get_option(0, 'filetype')
