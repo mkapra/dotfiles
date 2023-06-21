@@ -1,10 +1,19 @@
 # ============================== Environment Variables
-if which nvim &> /dev/null
+# if which nvim &> /dev/null
+# then
+#   export EDITOR=nvim
+# else
+#   export EDITOR=vim
+# fi
+if which hx &> /dev/null
 then
-  export EDITOR=nvim
+  export EDITOR=hx
+  export VISUAL=hx
 else
   export EDITOR=vim
+  export VISUAL=vim
 fi
+
 export LC_ALL=en_US.UTF-8
 export LC_MESSAGES=en_US.UTF-8
 export LANG=en_US.UTF-8
@@ -15,6 +24,7 @@ then
 fi
 
 [ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
+export BAT_THEME="base16-256"
 
 # ============================== Aliases
 alias g='git'
