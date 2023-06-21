@@ -87,6 +87,15 @@ install_vim() {
   echo 'Do not forget to launch (n)vim and install all the plugins'
 }
 
+# ============================== helix
+install_helix() {
+  if which hx &> /dev/null
+  then
+    mkdir -p $HOME/.config/helix
+    ln -fs $SCRIPT/editors/helix/* $HOME/.config/helix
+  fi
+}
+
 # ============================== shells
 install_shells() {
   echo '-- Setting up shells'
@@ -203,6 +212,7 @@ install_fonts
 install_gnome_terminal
 install_kitty_terminal
 install_vim
+install_helix
 install_shells
 install_tmux
 install_git

@@ -1,0 +1,4 @@
+[[language]]
+name = "vue"
+formatter = { command = "prettier", args = ["--parser", "vue"] }
+auto-format = true
