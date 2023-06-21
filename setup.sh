@@ -70,19 +70,26 @@ install_gnome_terminal() {
 
 # ============================== vim
 install_vim() {
-  if which vim &> /dev/null
-  then
-    ln -fs $SCRIPT/editors/vimrc $HOME/.vimrc
-    curl --silent -fLo ~/.vim/autoload/plug.vim --create-dirs \
-      https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-  fi
+  configure_vim() {
+    if which vim &> /dev/null
+    then
+      ln -fs $SCRIPT/editors/vimrc $HOME/.vimrc
+      curl --silent -fLo ~/.vim/autoload/plug.vim --create-dirs \
+        https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    fi
+  }
 
-  echo "-- Configure nvim"
-  if which nvim &> /dev/null
-  then
-    mkdir -p $HOME/.config/nvim
-    ln -fs $SCRIPT/editors/nvim/* $HOME/.config/nvim/
-  fi
+  configure_nvim() {
+    echo "-- Configure nvim"
+    if which nvim &> /dev/null
+    then
+      mkdir -p $HOME/.config/nvim
+      ln -fs $SCRIPT/editors/nvim/* $HOME/.config/nvim/
+    fi
+  }
+
+  configure_vim
+  # configure_nvim
 
   echo 'Do not forget to launch (n)vim and install all the plugins'
 }
@@ -137,6 +144,7 @@ install_git() {
     echo '-- Setting up git'
     ln -fs $SCRIPT/git/message $HOME/.gitmessage
     ln -fs $SCRIPT/git/config $HOME/.gitconfig
+  fi
 }
 
 # ============================== Mail
