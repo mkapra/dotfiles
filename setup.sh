@@ -20,7 +20,7 @@ install_kitty_terminal() {
   echo "-- Installing kitty terminal"
   if which kitty &> /dev/null
   then
-    mkdir -p $HOME/.config/kitty
+    mkdir -p $HOME/.config/kitty $HOME/.local/bin
     ln -fs $SCRIPT/terminals/kitty/kitty.conf $HOME/.config/kitty/
     ln -fs $SCRIPT/terminals/nightlight.sh $HOME/.local/bin/
 
@@ -55,6 +55,7 @@ install_gnome_terminal() {
     if which gnome-terminal &> /dev/null
     then
       echo "-- Install everforest gnome-terminal theme"
+      mkdir -p $HOME/.local/bin
       ln -fs $SCRIPT/terminals/nightlight.sh $HOME/.local/bin/
       dconf reset -f /org/gnome/terminal/legacy/profiles:/
       dconf load / < $SCRIPT/terminals/gnome-terminal/everforest-dark-hard-theme.dconf
@@ -124,6 +125,16 @@ install_shells() {
   fi
 }
 
+# ============================== zellij
+install_zellij() {
+  if which zellij &> /dev/null
+  then
+    echo '-- Setting up zellij'
+    mkdir -p $HOME/.config/zellij
+    ln -fs $SCRIPT/term_multiplexers/zellij/config.kdl $HOME/.config/zellij
+  fi
+}
+
 # ============================== tmux
 install_tmux() {
   if which tmux &> /dev/null
@@ -133,7 +144,7 @@ install_tmux() {
     [ ! -d $HOME/.tmux/plugins/tpm ] && \
       git clone -q https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm
     mkdir -p $HOME/.config/tmux
-    ln -fs $SCRIPT/tmux/config $HOME/.config/tmux/tmux.conf
+    ln -fs $SCRIPT/term_multiplexers/tmux/config $HOME/.config/tmux/tmux.conf
   fi
 }
 
@@ -152,7 +163,7 @@ install_mail() {
   if which mutt &> /dev/null
   then
     echo '-- Setting up mutt'
-    mkdir -p $HOME/.mutt/.cache
+    mkdir -p $HOME/.mutt/.cache $HOME/.local/bin
     ln -fs $SCRIPT/mail/mutt/rc $HOME/.mutt/muttrc
     ln -fs $SCRIPT/mail/mutt/theme $HOME/.mutt/theme
     ln -fs $SCRIPT/submodules/mutt_bgrun/mutt_bgrun $HOME/.local/bin/mutt_bgrun
@@ -174,13 +185,14 @@ install_mail() {
 install_rust() {
   if which cargo &> /dev/null
   then
-    tools=('exa' 'rg')
+    other_tools=('zellij' 'cargo-info' 'cargo-add' 'cargo-update' 'gitui')
+    alias_tools=('exa' 'rg')
     commands=('ls' 'grep')
     aliasses=('exa --icons' 'rg')
 
-    echo "-- Installing ${tools[@]} with cargo"
+    echo "-- Installing ${alias_tools[@]} with cargo"
     i=0
-    for tool in "${tools[@]}"
+    for tool in "${alias_tools[@]}"
     do
       grep -q "${aliasses[i]}" $HOME/.local_shrc && found=1 || found=0
       if [ $found -eq 0 ]
@@ -199,6 +211,11 @@ install_rust() {
       cargo install -q $tool
       let i++
     done
+
+    for tool in "${other_tools[@]}"
+    do
+      cargo install -q $tool
+    done
   fi
 }
 
@@ -208,6 +225,7 @@ install_kitty_terminal
 install_vim
 install_helix
 install_shells
+install_zellij
 install_tmux
 install_git
 install_mail
