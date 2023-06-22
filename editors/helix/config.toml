@@ -16,3 +16,6 @@ hidden = false
 
 [editor.lsp]
 display-inlay-hints = true
+
+[keys.normal."+"]
+d = ":insert-output date +'%a, %d.%m.%Y'"
