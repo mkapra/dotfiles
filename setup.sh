@@ -231,4 +231,4 @@ install_git
 install_mail
 install_rust
 
-./uninstallations.sh
+uninstallations.sh
