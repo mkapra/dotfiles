@@ -185,10 +185,10 @@ install_mail() {
 install_rust() {
   if which cargo &> /dev/null
   then
-    other_tools=('zellij' 'cargo-info' 'cargo-add' 'cargo-update' 'gitui' 'bat')
-    alias_tools=('exa' 'rg')
-    commands=('ls' 'grep')
-    aliasses=('exa --icons' 'rg')
+    other_tools=('zellij' 'cargo-info' 'cargo-add' 'cargo-update' 'gitui' 'bat' 'tokei' 'zoxide')
+    alias_tools=('exa' 'rg' 'xcp')
+    commands=('ls' 'grep' 'cp')
+    aliasses=('exa --icons' 'rg' 'xcp')
 
     echo "-- Installing ${alias_tools[@]} with cargo"
     i=0
