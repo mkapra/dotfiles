@@ -17,31 +17,53 @@ change_profile() {
     done
 }
 
-ssh-add -L | grep 'The agent has no identities'
-if [ $? -eq 0 ]
+ssh-add -L 2> /dev/null
+if [ $? -ne 0 ]
 then
   exit 1
 fi
 
-win_id_orig=$(xdotool getwindowfocus)
+set -x
 # Check if option is "dark" or "light"
 if [ "$option" == "dark" ]; then
-    # dconf write /org/gnome/terminal/legacy/profiles:/default "'$dark_profile'"
     change_profile moon
 
     touch $HOME/.darkmode
+    sed -i 's/theme = ".*"/theme = "rose_pine_moon"/' ${HOME}/.config/helix/config.toml
+    # pkill -USR1 hx
     while read -r host; do
       scp -q .darkmode $host:~
+      
+      ssh $host bash <<EOF
+        if which hx 2> /dev/null
+        then
+            sed -i 's/theme = ".*"/theme = "rose_pine_moon"/' ${HOME}/.config/helix/config.toml
+        fi
+        if [[ -f $HOME/.cargo/bin/zellij ]]
+        then
+            sed -i 's/theme ".*"/theme "rose-pine-moon"/' ${HOME}/.config/zellij/config.kdl
+        fi
+EOF
     done < "$HOME/.ssh/servers"
 elif [ "$option" == "light" ]; then
-    # dconf write /org/gnome/terminal/legacy/profiles:/default "'$light_profile'"
     change_profile dawn
 
     rm $HOME/.darkmode
+    sed -i 's/theme = ".*"/theme = "rose_pine_dawn"/' ${HOME}/.config/helix/config.toml
+    # pkill -USR1 hx
     while read -r host; do
-      ssh $host rm ~/.darkmode < /dev/null
+      ssh $host bash <<EOF
+        rm ~/.darkmode
+        if which hx 2> /dev/null
+        then
+            sed -i 's/theme = ".*"/theme = "rose_pine_dawn"/' ${HOME}/.config/helix/config.toml
+        fi
+        if [[ -f $HOME/.cargo/bin/zellij ]]
+        then
+            sed -i 's/theme ".*"/theme "rose-pine-dawn"/' ${HOME}/.config/zellij/config.kdl
+        fi
+EOF
     done < "$HOME/.ssh/servers"
 else
     echo "Invalid option. Please use 'dark' or 'light'."
 fi
-xdotool windowactivate $win_id_orig
