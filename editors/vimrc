@@ -12,33 +12,21 @@ autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
 \| endif
 
 call plug#begin()
-if has ('mac')
-  Plug 'github/copilot.vim'
-endif
-
 if !has('nvim')
-  Plug 'ctrlpvim/ctrlp.vim'               	" file finder
+  Plug 'ctrlpvim/ctrlp.vim'             " file finder
   Plug 'jiangmiao/auto-pairs'			" Automatic brackets
 endif
 
 " Appearance
-Plug 'frazrepo/vim-rainbow'
-Plug 'sainnhe/everforest'                       " Everforest colorscheme
+Plug 'rose-pine/vim'                    " Colorscheme
+
 "" Airline for normal vim and tmuxline
-if !has('nvim')
-  Plug 'vim-airline/vim-airline'
-  Plug 'vim-airline/vim-airline-themes'
-endif
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 
 " General plugins for (n)vim
-Plug 'jiangmiao/auto-pairs'                     " automatic brackets
-Plug 'tpope/vim-commentary'                     " commenting
-Plug 'tpope/vim-sleuth'                 	" heuristic file indendation
-" Plug 'vim-scripts/vim-auto-save'                " Auto save files
-
-Plug 'christoomey/vim-tmux-navigator'
-
-Plug 'terrastruct/d2-vim'
+Plug 'tpope/vim-commentary'              " commenting
+Plug 'tpope/vim-sleuth'                  " heuristic file indendation
 call plug#end()
 
 " ============================== Colors
@@ -50,27 +38,14 @@ endif
 
 if filereadable(expand("$HOME") . "/.darkmode")
     set background=dark
+    colorscheme rosepine_moon
 else
     set background=light
+    colorscheme rosepine_dawn
 endif
-" Switch to dark or light background dependent on existence of file
-" ~/.darkmode
-" function! CheckDarkMode(timer)
-"   if filereadable(expand("$HOME") . "/.darkmode")
-"       set background=dark
-"   else
-"       set background=light
-"   endif
-"   call timer_start(5000, 'CheckDarkMode')
-" endfunction
-" call CheckDarkMode(0)
 
 syntax on
-let g:everforest_background = 'medium'
-let g:everforest_better_performance = 1
-colorscheme everforest
 set termguicolors
-let g:rainbow_active = 1
 
 " ============================== General
 filetype indent plugin on
@@ -94,12 +69,9 @@ set backspace=indent,eol,start
 set wildmenu
 set scrolloff=5
 
-if !has('nvim')
-  let g:ctrlp_show_hidden = 1           " show hidden files in ctrlp menus
-endif
+let g:ctrlp_show_hidden = 1  " show hidden files in ctrlp menus
 
 set wildignore+=*/target/*,*docx*,*pdf* " Hide some files in e.g. :e
-" autocmd BufWritePre * :%s/\s\+$//e      " Remove trailing whitespaces
 :highlight ExtraWhitespace ctermbg=red guibg=red
 :match ExtraWhitespace /\s\+$/
 
@@ -119,18 +91,6 @@ let &t_EI = "\<Esc>[2 q"
 set laststatus=3
 set showtabline=2
 let g:airline_powerline_fonts = 1
-
-" ============================== Autosave
-" let g:auto_save = 1		    " enable AutoSave on Vim startup
-" let g:auto_save_in_insert_mode = 0  " do not save while in insert mode
-" let g:auto_save_silent = 1	    " do not display the auto-save notification
-
-" ============================== nvim
-if has('nvim')
-lua << EOF
-  require('plugins')
-EOF
-endif
 
 " ============================== Shortcuts
 nnoremap <leader>n  <cmd>noh<cr>    " Reset highlighting
