@@ -2,29 +2,13 @@
 
 SCRIPT=$(dirname -- "$( readlink -f -- "$0"; )";)
 
-# ============================== Fonts
-install_fonts() {
-  echo "-- Installing required fonts"
-  # Install fonts on local machines only. The simplest way to do this is
-  # checking for a gnome-terminal application
-  if which gnome-terminal &> /dev/null
-  then
-    mkdir -p $HOME/.local/share/fonts
-    ln -fs $SCRIPT/submodules/sfmono-font/SF* $HOME/.local/share/fonts/
-    fc-cache -f -v &> /dev/null
-  fi
-}
-
 # ============================== kitty-terminal
 install_kitty_terminal() {
   echo "-- Installing kitty terminal"
   if which kitty &> /dev/null
   then
-    mkdir -p $HOME/.config/kitty $HOME/.local/bin
-    ln -fs $SCRIPT/terminals/kitty/kitty.conf $HOME/.config/kitty/
+    mkdir -p $HOME/.local/bin
     ln -fs $SCRIPT/terminals/nightlight.sh $HOME/.local/bin/
-
-    ln -fs $SCRIPT/submodules/kitty-rose-pine-theme/dist/rose-pine* $HOME/.config/kitty/
     ln -fs $SCRIPT/submodules/kitty-rose-pine-theme/icons/rose-pine-terminal-icon.png $HOME/.config/kitty/kitty.app.png
 
     if [[ "$(uname -a)" == *"Darwin"* ]]

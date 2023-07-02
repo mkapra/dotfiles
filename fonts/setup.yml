@@ -1,0 +1,23 @@
+---
+
+# TODO: Do not install fonts on servers
+
+- name: Create local fonts directory
+  ansible.builtin.file:
+    path: ~/.local/share/fonts
+    state: directory
+
+- name: Find sfmono font
+  ansible.builtin.find:
+    paths: fonts/sf-mono
+    patterns: "*.otf"
+  register: otf_files
+
+- name: Install fonts
+  ansible.builtin.copy:
+    src: "{{ item.path }}"
+    dest: ~/.local/share/fonts
+  with_items: "{{ otf_files.files }}"
+
+- name: Reload fccache
+  ansible.builtin.command: fccache -f -v

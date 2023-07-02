@@ -1,0 +1,24 @@
+---
+
+- name: Create kitty configuration directory
+  ansible.builtin.file:
+    path: ~/.config/kitty
+    state: directory
+
+- name: Copy kitty.conf
+  ansible.builtin.copy:
+    src: terminals/kitty/kitty.conf
+    dest: ~/.config/kitty/kitty.conf
+
+- name: Find kitty themes
+  ansible.builtin.find:
+    paths: terminals/kitty/themes
+    patterns: rose*.conf
+    recurse: true
+  register: kittythemes
+
+- name: Copy kitty themes
+  ansible.builtin.copy:
+    src: "{{ item.path }}"
+    dest: ~/.config/kitty
+  with_items: "{{ kittythemes.files }}"

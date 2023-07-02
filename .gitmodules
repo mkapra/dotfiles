@@ -28,3 +28,12 @@
 [submodule "submodules/kitty-rose-pine-theme"]
 	path = submodules/kitty-rose-pine-theme
 	url = https://github.com/rose-pine/kitty.git
+[submodule "fonts/sf-mono"]
+	path = fonts/sf-mono
+	url = https://github.com/epk/SF-Mono-Nerd-Font.git
+[submodule "terminals/kitty/themes/kitty"]
+	path = terminals/kitty/themes/kitty
+	url = https://github.com/rose-pine/kitty.git
+[submodule "terminals/kitty/themes/rosepine"]
+	path = terminals/kitty/themes/rosepine
+	url = https://github.com/rose-pine/kitty.git

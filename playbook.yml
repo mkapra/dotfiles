@@ -1,0 +1,10 @@
+- name: Dotfiles configuration
+  hosts: localhost
+  connection: local
+  tasks:
+    # - name: Install fonts
+    #   ansible.builtin.include_tasks:
+    #     file: fonts/setup.yml
+    - name: Configure terminals
+      ansible.builtin.include_tasks:
+        file: terminals/setup.yml
