@@ -23,15 +23,15 @@
     - name: Configure git
       ansible.builtin.include_tasks:
         file: git/setup.yml
-    - name: Uninstall lazygit
-      ansible.builtin.command: find "${HOME}" -type f -not -path "*/*dotfiles*/*" -name "*lazygit*" -exec rm {} + 2> /dev/null
     - name: Remove nvim
       ansible.builtin.file:
         path: "{{ item }}"
         state: absent
         force: true
-        recurse: true
       loop:
+        - ~/.config/nvim/
+        - ~/.cache/nvim/
+        - ~/.local/share/nvim/
         - ~/.config/nvim
         - ~/.cache/nvim
         - ~/.local/share/nvim
