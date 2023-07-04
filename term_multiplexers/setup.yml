@@ -27,7 +27,7 @@
 - name: Create tmux configuration directory
   ansible.builtin.file:
     path: ~/.config/tmux/plugins
-    state: director
+    state: directory
   when: tmux_path.rc == 0
 
 - name: Copy tmux configuration

@@ -1,23 +1,30 @@
 ---
 
-# TODO: Do not install fonts on servers
+- name: Check for ubuntu desktop
+  shell:
+    cmd: "echo $XDG_CURRENT_DESKTOP"
+  register: current_desktop
 
 - name: Create local fonts directory
   ansible.builtin.file:
     path: ~/.local/share/fonts
     state: directory
+  when: current_desktop.stdout == 'ubuntu:GNOME'
 
 - name: Find sfmono font
   ansible.builtin.find:
     paths: fonts/sf-mono
     patterns: "*.otf"
   register: otf_files
+  when: current_desktop.stdout == 'ubuntu:GNOME'
 
 - name: Install fonts
   ansible.builtin.copy:
     src: "{{ item.path }}"
     dest: ~/.local/share/fonts
   with_items: "{{ otf_files.files }}"
+  when: current_desktop.stdout == 'ubuntu:GNOME'
 
 - name: Reload fccache
-  ansible.builtin.command: fccache -f -v
+  ansible.builtin.command: fc-cache -f -v
+  when: current_desktop.stdout == 'ubuntu:GNOME'
