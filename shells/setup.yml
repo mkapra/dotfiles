@@ -1,0 +1,28 @@
+---
+
+- name: Copy general shellrc file
+  ansible.builtin.copy:
+    src: shellrc.generic
+    dest: ~/.shellrc.generic
+
+- name: Check if zsh is installed
+  ansible.builtin.command: which zsh
+  register: zsh_path
+  failed_when: false
+
+- name: Copy zsh configuration file
+  ansible.builtin.copy:
+    src: zshrc
+    dest: ~/.zshrc
+  when: zsh_path.rc == 0
+
+- name: Check if bash is installed
+  ansible.builtin.command: which bash
+  register: bash_path
+  failed_when: false
+
+- name: Copy bash configuration file
+  ansible.builtin.copy:
+    src: bashrc
+    dest: ~/.bashrc
+  when: bash_path.rc == 0

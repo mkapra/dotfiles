@@ -6,8 +6,12 @@ case $- in
 esac
 
 # Source other configurations
-[ -f ~/.generic_shrc ] && source ~/.generic_shrc
-# [ -f ~/.fzf.bash ] && source ~/.fzf.bash
+[ -f ~/.shellrc.generic ] && source ~/.shellrc.generic
+
+if which zoxide &> /dev/null
+then
+  eval "$(zoxide init zsh)"
+fi
 
 # ============================== Prompt
 autoload -Uz vcs_info
@@ -82,7 +86,4 @@ setopt share_history          # share command history data inside tmux
 export HISTFILE="$HOME/.zsh_history"
 export SAVEHIST=5000
 
-eval "$(zoxide init zsh)"
-
-[ -f ~/.local_shrc ] && source ~/.local_shrc # Source local settings
-[ -f ~/.zshrc_local ] && source ~/.zshrc_local # Source local settings
+[ -f ~/.shellrc.local ] && source ~/.shellrc.local # Source local settings

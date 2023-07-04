@@ -6,8 +6,7 @@ case $- in
 esac
 
 # Source other configurations
-[ -f ~/.generic_shrc ] && source ~/.generic_shrc
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+[ -f ~/.shellrc.generic ] && source ~/.shellrc.generic
 
 # History
 shopt -s histappend
