@@ -2,9 +2,21 @@
   hosts: localhost
   connection: local
   tasks:
-    # - name: Install fonts
-    #   ansible.builtin.include_tasks:
-    #     file: fonts/setup.yml
+    - name: Install rust tools
+      ansible.builtin.include_tasks:
+        file: rust/setup.yml
+    - name: Install fonts
+      ansible.builtin.include_tasks:
+        file: fonts/setup.yml
     - name: Configure terminals
       ansible.builtin.include_tasks:
         file: terminals/setup.yml
+    - name: Configure editors
+      ansible.builtin.include_tasks:
+        file: editors/setup.yml
+    - name: Configure terminal multiplexers
+      ansible.builtin.include_tasks:
+        file: term_multiplexers/setup.yml
+    - name: Configure git
+      ansible.builtin.include_tasks:
+        file: git/setup.yml

@@ -1,0 +1,43 @@
+---
+
+# zellij
+- name: Check if zellij needs to be configured
+  ansible.builtin.command: which zellij
+  register: zellij_path
+  failed_when: false
+
+- name: Create zellij configuration directory
+  ansible.builtin.file:
+    path: ~/.config/zellij
+    state: directory
+  when: zellij_path.rc == 0
+
+- name: Copy zellij configuration
+  ansible.builtin.copy:
+    src: zellij/config.kdl
+    dest: ~/.config/zellij
+  when: zellij_path.rc == 0
+
+# tmux
+- name: Check if tmux needs to be configured
+  ansible.builtin.command: which tmux
+  register: tmux_path
+  failed_when: false
+
+- name: Create tmux configuration directory
+  ansible.builtin.file:
+    path: ~/.config/tmux/plugins
+    state: director
+  when: tmux_path.rc == 0
+
+- name: Copy tmux configuration
+  ansible.builtin.copy:
+    src: tmux/config
+    dest: ~/.config/tmux/tmux.conf
+  when: tmux_path.rc == 0
+
+- name: Clone tpm plugin manager repository
+  git:
+    repo: https://github.com/tmux-plugins/tpm
+    dest: ~/.config/tmux/plugins/tpm
+  when: tmux_path.rc == 0

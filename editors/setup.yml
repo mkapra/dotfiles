@@ -1,0 +1,48 @@
+---
+
+# Helix
+- name: Check if helix needs to be configured
+  ansible.builtin.command: which hx
+  register: hx_path
+  failed_when: false
+
+- name: Create helix configuration directory
+  ansible.builtin.file:
+    path: ~/.config/helix
+    state: directory
+  when: hx_path.rc == 0
+
+- name: Copy helix configurations
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: ~/.config/helix
+  with_items:
+    - helix/config.toml
+    - helix/languages.toml
+  when: hx_path.rc == 0
+
+# vim
+- name: Check if vim needs to be configured
+  ansible.builtin.command: which vim
+  register: vim_path
+  changed_when: false
+  failed_when: vim_path.rc != 0
+
+- name: Copy vim configuration
+  ansible.builtin.copy:
+    src: editors/vimrc
+    dest: ~/.vimrc
+  when: vim_path.rc == 0
+
+- name: Create vim-plug directory
+  ansible.builtin.file:
+    path: ~/.vim/autoload
+    state: directory
+  when: vim_path.rc == 0
+
+- name: Install vim-plug for vim
+  get_url:
+    url: "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
+    dest: "~/.vim/autoload/plug.vim"
+    mode: "0644"
+  when: vim_path.rc == 0

@@ -1,0 +1,4 @@
+all:
+  hosts:
+    localhost:
+      mail_address: maximilian@kapra.de

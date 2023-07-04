@@ -1,0 +1,14 @@
+---
+
+- name: "Install {{ tool.name }}"
+  ansible.builtin.command: "cargo install {{ tool.name }}"
+  register: tool_installation
+  failed_when: false
+
+- name: "Generating alias for {{ tool.name }}"
+  ansible.builtin.lineinfile:
+    path: ~/.aliases
+    line: "alias {{ tool.alias }}='{{ tool.alias_call }}'"
+    create: true
+  when: tool_installation.rc == 0
+

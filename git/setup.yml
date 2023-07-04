@@ -1,0 +1,11 @@
+---
+
+- name: Template gitconfig
+  ansible.builtin.template:
+    src: config.j2 
+    dest: ~/.gitconfig
+
+- name: Move gitmessage
+  ansible.builtin.copy:
+    src: message
+    dest: ~/.gitmessage

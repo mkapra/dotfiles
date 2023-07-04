@@ -1,0 +1,36 @@
+---
+
+- name: Check if rust tools can be installed
+  ansible.builtin.command: which cargo
+  register: cargo_path
+  failed_when: false
+
+- name: Install tools with cargo
+  ansible.builtin.command: cargo install {{ item }}
+  with_items:
+    - zellij
+    - cargo-info
+    - cargo-add
+    - cargo-update
+    - gitui
+    - bat
+    - tokei
+    - zoxide
+    - nu
+  when: cargo_path.rc == 0
+
+- name: Install rust aliases
+  include_tasks: alias_install.yml
+  loop:
+    - name: exa
+      alias: ls
+      alias_call: exa --icons
+    - name: ripgrep
+      alias: grep
+      alias_call: rg
+    - name: xcp
+      alias: cp
+      alias_call: xcp
+  loop_control:
+    loop_var: tool
+  when: cargo_path.rc == 0
