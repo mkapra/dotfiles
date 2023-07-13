@@ -86,3 +86,6 @@ sync_kitty_info() {
     scp -q /usr/share/terminfo/${TERM:0:1}/$TERM $host:\~/.terminfo/${TERM:0:1}/
   done < "$HOME/.ssh/servers"
 }
+
+SHELLNAME=$(echo $SHELL | rev | cut -d '/' -f 1 | rev)
+which zoxide &> /dev/null && eval "$(zoxide init ${SHELLNAME})"
