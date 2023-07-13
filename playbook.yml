@@ -35,3 +35,6 @@
         - ~/.config/nvim
         - ~/.cache/nvim
         - ~/.local/share/nvim
+    - name: Uninstall lazygit
+      ansible.builtin.file:
+        path: "{{ ansible_env.HOME }}/.local/bin/lazygit"
