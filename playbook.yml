@@ -38,3 +38,5 @@
     - name: Uninstall lazygit
       ansible.builtin.file:
         path: "{{ ansible_env.HOME }}/.local/bin/lazygit"
+        state: absent
+        force: true
