@@ -26,3 +26,32 @@
     src: bashrc
     dest: ~/.bashrc
   when: bash_path.rc == 0
+
+- name: Check if nu is installed
+  ansible.builtin.command: which nu
+  register: nu_path
+  failed_when: false
+
+- name: Copy nu configuration
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: ~/.config/nu/
+  when: nu_path.rc == 0
+  loop:
+    - nu/config.nu
+    - nu/env.nu
+
+- name: Add custom config.nu configuration
+  ansible.builtin.blockinfile:
+    path: ~/.config/nu/config.nu
+    block: "{{ config.shells.nu.config }}"
+  when: nu_path.rc == 0
+
+- name: Add custom env.nu configuration
+  ansible.builtin.blockinfile:
+    path: ~/.config/nu/env.nu
+    block: "{{ config.shells.nu.env }}"
+  when: nu_path.rc == 0
+
+- name: Install starship
+  ansible.builtin.command: curl -sS https://starship.rs/install.sh | sh -s -- -y -b ~/.local/bin
