@@ -4,7 +4,6 @@ theme = "rose_pine_dawn"
 line-number = "relative"
 true-color = true
 idle-timeout = 100
-bufferline = "multiple"
 
 [editor.cursor-shape]
 insert = "bar"
