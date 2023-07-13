@@ -553,12 +553,17 @@ let-env config = {
 }
 
 if (which starship | select path | length) != 0 {
-  mkdir ~/.cache/starship
-  starship init nu | save -f ~/.cache/starship/init.nu
+  if ('~/.cache/starship/init.nu' | path exists) == false {
+    mkdir ~/.cache/starship
+    starship init nu | save -f ~/.cache/starship/init.nu
+  }
   source ~/.cache/starship/init.nu
 }
 
 if (which zoxide | select path | length) != 0 {
+  if ('~/.config/nushell/zoxide.nu' | path exists) == false {
+    zoxide init nushell | save -f ~/.config/nushell/zoxide.nu
+  }
   source ~/.config/nushell/zoxide.nu
   alias cd = z
 }
