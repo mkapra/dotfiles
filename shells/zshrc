@@ -87,3 +87,4 @@ export HISTFILE="$HOME/.zsh_history"
 export SAVEHIST=5000
 
 [ -f ~/.shellrc.local ] && source ~/.shellrc.local # Source local settings
+which starship &> /dev/null && eval "$(starship init zsh)"

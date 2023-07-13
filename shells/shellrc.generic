@@ -89,4 +89,3 @@ sync_kitty_info() {
 
 SHELLNAME=$(echo $SHELL | rev | cut -d '/' -f 1 | rev)
 which zoxide &> /dev/null && eval "$(zoxide init ${SHELLNAME})"
-which starship &> /dev/null && eval "$(starship init ${SHELLNAME})"
