@@ -45,13 +45,13 @@
   ansible.builtin.blockinfile:
     path: ~/.config/nu/config.nu
     block: "{{ config.shells.nu.config }}"
-  when: nu_path.rc == 0
+  when: nu_path.rc == 0 and config.shells.nu.config is defined
 
 - name: Add custom env.nu configuration
   ansible.builtin.blockinfile:
     path: ~/.config/nu/env.nu
     block: "{{ config.shells.nu.env }}"
-  when: nu_path.rc == 0
+  when: nu_path.rc == 0 and config.shells.nu.env is defined
 
 - name: Install starship
   ansible.builtin.command: curl -sS https://starship.rs/install.sh | sh -s -- -y -b ~/.local/bin
