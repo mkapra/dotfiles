@@ -35,7 +35,7 @@
 - name: Copy nu configuration
   ansible.builtin.copy:
     src: "{{ item }}"
-    dest: ~/.config/nu/
+    dest: ~/.config/nushell/
   when: nu_path.rc == 0
   loop:
     - nu/config.nu
@@ -43,13 +43,13 @@
 
 - name: Add custom config.nu configuration
   ansible.builtin.blockinfile:
-    path: ~/.config/nu/config.nu
+    path: ~/.config/nushell/config.nu
     block: "{{ config.shells.nu.config }}"
   when: nu_path.rc == 0 and config.shells.nu.config is defined
 
 - name: Add custom env.nu configuration
   ansible.builtin.blockinfile:
-    path: ~/.config/nu/env.nu
+    path: ~/.config/nushell/env.nu
     block: "{{ config.shells.nu.env }}"
   when: nu_path.rc == 0 and config.shells.nu.env is defined
 
