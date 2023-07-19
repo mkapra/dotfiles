@@ -16,6 +16,12 @@
     dest: ~/.zshrc
   when: zsh_path.rc == 0
 
+- name: Add custom zsh configuration
+  ansible.builtin.blockinfile:
+    path: ~/.zshrc
+    block: "{{ config.shells.zsh.rc }}"
+  when: zsh_path.rc == 0 and config.shells.zsh.rc is defined
+
 - name: Check if bash is installed
   ansible.builtin.command: which bash
   register: bash_path
@@ -26,6 +32,12 @@
     src: bashrc
     dest: ~/.bashrc
   when: bash_path.rc == 0
+
+- name: Add custom bash configuration
+  ansible.builtin.blockinfile:
+    path: ~/.bashrc
+    block: "{{ config.shells.bash.rc }}"
+  when: bash_path.rc == 0 and config.shells.bash.rc is defined
 
 - name: Check if nu is installed
   ansible.builtin.command: which nu
