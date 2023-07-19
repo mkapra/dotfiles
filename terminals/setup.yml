@@ -13,7 +13,7 @@
 - name: Find kitty themes
   ansible.builtin.find:
     paths: terminals/kitty/themes
-    patterns: rose*.conf
+    patterns: (rose*.conf)|(onehalf-dark.conf)
     recurse: true
   register: kittythemes
 

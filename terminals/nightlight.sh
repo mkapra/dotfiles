@@ -9,7 +9,12 @@ option=$1
 
 # Function to change the profile of all open kitty-terminal windows
 change_profile() {
-    ln -fs $HOME/.config/kitty/"rose-pine-$1.conf" $HOME/.config/kitty/current-theme.conf
+    if [[ $1 -eq 'moon' ]]
+    then
+        ln -fs $HOME/.config/kitty/onehalf-dark.conf $HOME/.config/kitty/current-theme.conf
+    else
+        ln -fs $HOME/.config/kitty/rose-pine-$1.conf $HOME/.config/kitty/current-theme.conf
+    fi
     files="/tmp/kitty-$USER-*"
     for instance in $files
     do

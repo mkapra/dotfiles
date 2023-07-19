@@ -37,3 +37,6 @@
 [submodule "terminals/kitty/themes/rosepine"]
 	path = terminals/kitty/themes/rosepine
 	url = https://github.com/rose-pine/kitty.git
+[submodule "terminals/kitty/themes/onehalf"]
+	path = terminals/kitty/themes/onehalf
+	url = https://github.com/sonph/onehalf.git
