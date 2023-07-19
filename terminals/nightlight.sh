@@ -35,7 +35,7 @@ if [ "$option" == "dark" ]; then
       scp -q .darkmode $host:~
       
       ssh $host bash <<EOF
-        if which hx 2> /dev/null
+        if [[ -f $HOME/.config/helix/config.toml ]]
         then
             sed -i 's/theme = ".*"/theme = "rose_pine_moon"/' ${HOME}/.config/helix/config.toml
         fi
@@ -54,7 +54,7 @@ elif [ "$option" == "light" ]; then
     while read -r host; do
       ssh $host bash <<EOF
         rm ~/.darkmode
-        if which hx 2> /dev/null
+        if [[ -f $HOME/.config/helix/config.toml ]]
         then
             sed -i 's/theme = ".*"/theme = "rose_pine_dawn"/' ${HOME}/.config/helix/config.toml
         fi
