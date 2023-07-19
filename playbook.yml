@@ -1,6 +1,5 @@
 - name: Dotfiles configuration
-  hosts: localhost
-  connection: local
+  hosts: all
   tasks:
     - name: Install fonts
       ansible.builtin.include_tasks:
@@ -40,3 +39,16 @@
         path: "{{ ansible_env.HOME }}/.local/bin/lazygit"
         state: absent
         force: true
+    - name: Find cargo compile directories
+      ansible.builtin.find:
+        paths: /tmp
+        file_type: directory
+        use_regex: true
+        patterns: "cargo-install.*"
+      register: found_files
+    - name: Delete cargo compile directories
+      ansible.builtin.file:
+        state: absent
+        path: "{{ item.path }}"
+      when: item.pw_name == lookup('ansible.builtin.env', 'USER')
+      loop: "{{ found_files.files }}"
