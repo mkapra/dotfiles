@@ -13,7 +13,9 @@
 - name: Find kitty themes
   ansible.builtin.find:
     paths: terminals/kitty/themes
-    patterns: (rose*.conf)|(onehalf-dark.conf)
+    patterns:
+      - rose*.conf
+      - onehalf*.conf
     recurse: true
   register: kittythemes
 
@@ -21,4 +23,4 @@
   ansible.builtin.copy:
     src: "{{ item.path }}"
     dest: ~/.config/kitty
-  with_items: "{{ kittythemes.files }}"
+  loop: "{{ kittythemes.files }}"
