@@ -9,7 +9,7 @@ option=$1
 
 # Function to change the profile of all open kitty-terminal windows
 change_profile() {
-    if [[ $1 -eq 'moon' ]]
+    if [[ $1 == 'moon' ]]
     then
         ln -fs $HOME/.config/kitty/onehalf-dark.conf $HOME/.config/kitty/current-theme.conf
     else
