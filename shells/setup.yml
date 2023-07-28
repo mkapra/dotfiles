@@ -70,3 +70,7 @@
   failed_when: false
   args:
     warn: false
+  environment:
+    - http_proxy: "{{ proxy | default('') }}"
+    - https_proxy: "{{ proxy | default('') }}"
+    - ftp_proxy: "{{ proxy | default('') }}"
