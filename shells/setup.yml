@@ -65,12 +65,25 @@
     block: "{{ config.shells.nu.env }}"
   when: nu_path.rc == 0 and config.shells.nu.env is defined
 
-- name: Install starship
-  ansible.builtin.command: curl -sS https://starship.rs/install.sh | sh -s -- -y -b ~/.local/bin
-  failed_when: false
-  args:
-    warn: false
+- name: Download Starship.rs install script
+  get_url:
+    url: https://starship.rs/install.sh
+    dest: /tmp/install_starship.sh
+    mode: '0755'
   environment:
     - http_proxy: "{{ proxy | default('') }}"
     - https_proxy: "{{ proxy | default('') }}"
     - ftp_proxy: "{{ proxy | default('') }}"
+  ignore_errors: true
+  register: download_starship
+
+- name: Execute Starship.rs install script
+  ansible.builtin.command: /tmp/install_starship.sh -y -b ~/.local/bin
+  ignore_errors: true
+  when: download_starship is succeeded
+
+- name: Remove the downloaded script
+  file:
+    path: /tmp/install_starship.sh
+    state: absent
+  when: download_starship is succeeded
