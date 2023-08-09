@@ -3,49 +3,51 @@
   email	= {{ mail_address }}
 
 [alias]
-  a	= add
-  find	= !git ls-files "*"/"$1"
-  co	= checkout
-  cob	= checkout -b
-  c	= commit -v
-  ca	= commit -v --amend
-  d	= diff
-  l	= log
-  g	= grep
-  ds	= diff --staged
-  fo	= fetch origin
-  rom	= !git rebase $(git rev-parse --abbrev-ref --symbolic-full-name @{u})
-  romi	= !git rebase -i $(git rev-parse --abbrev-ref --symbolic-full-name @{u})
-  rc	= rebase --continue
-  ra	= rebase --abort
-  s	= status
-  sp	= stash pop
+  a	      = add
+  ca	  = commit -v --amend
+  c	      = commit -v
+  cob	  = checkout -b
+  co	  = checkout
+  d	      = diff
+  ds	  = diff --staged
+  find	  = !git ls-files "*"/"$1"
+  fo	  = fetch origin
+  g	      = grep
+  l	      = log
+  nuke	  = "!f() { git clean -dfxf; git reset HEAD --hard; }; f"
   pullall = "!f(){ git pull \"$@\" && git submodule update --init --recursive; }; f"
-  nuke	= "!f() { git clean -dfxf; git reset HEAD --hard; }; f"
+  ra	  = rebase --abort
+  rc	  = rebase --continue
+  rom	  = !git rebase $(git rev-parse --abbrev-ref --symbolic-full-name @{u})
+  romi	  = !git rebase -i $(git rev-parse --abbrev-ref --symbolic-full-name @{u})
+  sp	  = stash pop
+  s	      = status
+  go      = "!f() { b=${1-master}; git push origin HEAD:refs/for/$b; }; f"
+  god     = "!f() { b=${1-master}; c=${2-HEAD}; git push -o draft origin $c:refs/for/$b; }; f"
 
 [color]
-  diff = auto
-  status = auto
-  branch = auto
+  diff        = auto
+  status      = auto
+  branch      = auto
   interactive = auto
-  ui = true
-  pager = true
+  ui          = true
+  pager       = true
 
 [core]
   pager	= less -+$LESS -R
 
 [commit]
-  template	= ~/.gitmessage
+  template = ~/.gitmessage
 
 [ush]
-  default	= simple
+  default = simple
 
 [pager]
-  grep	= false
-  diff	= false
+  grep = false
+  diff = false
 
 [diff]
-  colorMoved	= true
+  colorMoved = true
 
 [pull]
   rebase = false
