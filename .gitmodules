@@ -1,42 +1,9 @@
-[submodule "submodules/everforest.iterm2"]
-	path = submodules/everforest.iterm2
-	url = https://github.com/icewind/everforest.iterm2.git
 [submodule "submodules/sfmono-font"]
 	path = submodules/sfmono-font
 	url = https://github.com/epk/SF-Mono-Nerd-Font.git
 [submodule "submodules/mutt_bgrun"]
 	path = submodules/mutt_bgrun
 	url = https://github.com/RichiH/mutt_bgrun.git
-[submodule "shells/iterm/iterm"]
-	path = shells/iterm/iterm
-	url = https://github.com/rose-pine/iterm.git
-[submodule "shells/iterm/themes/rose-pine"]
-	path = shells/iterm/themes/rose-pine
-	url = https://github.com/rose-pine/iterm.git
-[submodule "terminals/iterm2/themes/rose-pine"]
-	path = terminals/iterm2/themes/rose-pine
-	url = https://github.com/rose-pine/iterm.git
-[submodule "terminals/kitty/kitty"]
-	path = terminals/kitty/kitty
-	url = https://github.com/rose-pine/kitty.git
-[submodule "terminals/kitty/rose-pine"]
-	path = terminals/kitty/rose-pine
-	url = https://github.com/rose-pine/kitty.git
-[submodule "terminals/kitty/themes/rose-pine"]
-	path = terminals/kitty/themes/rose-pine
-	url = https://github.com/rose-pine/kitty.git
-[submodule "submodules/kitty-rose-pine-theme"]
-	path = submodules/kitty-rose-pine-theme
-	url = https://github.com/rose-pine/kitty.git
 [submodule "fonts/sf-mono"]
 	path = fonts/sf-mono
 	url = https://github.com/epk/SF-Mono-Nerd-Font.git
-[submodule "terminals/kitty/themes/kitty"]
-	path = terminals/kitty/themes/kitty
-	url = https://github.com/rose-pine/kitty.git
-[submodule "terminals/kitty/themes/rosepine"]
-	path = terminals/kitty/themes/rosepine
-	url = https://github.com/rose-pine/kitty.git
-[submodule "terminals/kitty/themes/onehalf"]
-	path = terminals/kitty/themes/onehalf
-	url = https://github.com/sonph/onehalf.git
