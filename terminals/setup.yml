@@ -1,5 +1,23 @@
 ---
 
+- name: Check for ubuntu desktop
+  shell:
+    cmd: "echo $XDG_CURRENT_DESKTOP"
+  register: current_desktop
+
+- name: Ensure ~/.local/bin exists
+  ansible.builtin.file:
+    path: ~/.local/bin
+    state: directory
+  when: current_desktop.stdout == 'GNOME'
+
+- name: Copy nightlight.sh
+  ansible.builtin.copy:
+    src: nightlight.sh
+    dest: ~/.local/bin/nightlight.sh
+    mode: 'u=rwx,go=r'
+  when: current_desktop.stdout == 'GNOME'
+
 - name: Create kitty configuration directory
   ansible.builtin.file:
     path: ~/.config/kitty
