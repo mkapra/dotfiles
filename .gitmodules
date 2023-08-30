@@ -7,3 +7,9 @@
 [submodule "fonts/sf-mono"]
 	path = fonts/sf-mono
 	url = https://github.com/epk/SF-Mono-Nerd-Font.git
+[submodule "terminals/kitty/themes/theme-collection"]
+	path = terminals/kitty/themes/theme-collection
+	url = https://github.com/dexpota/kitty-themes.git
+[submodule "terminals/kitty/themes/rose-pine"]
+	path = terminals/kitty/themes/rose-pine
+	url = https://github.com/rose-pine/kitty.git
