@@ -14,8 +14,8 @@
   ansible.builtin.find:
     paths: terminals/kitty/themes
     patterns:
-      - rose*.conf
-      - onehalf*.conf
+      - rose-pine-dawn.conf
+      - ayu_mirage.conf
     recurse: true
   register: kittythemes
 
