@@ -3,6 +3,15 @@
 # Get the current option
 option=$1
 
+change_theme() {
+    ssh $host bash <<EOF
+        if [[ -f $HOME/.config/helix/config.toml ]]
+        then
+            sed -i 's/theme = ".*"/theme = "$1"/' $HOME/.config/helix/config.toml
+        fi
+EOF
+}
+
 # Function to change the profile of all open kitty-terminal windows
 change_profile() {
     if [[ $1 == 'dark' ]]
@@ -14,26 +23,17 @@ change_profile() {
         sed -i 's/theme = ".*"/theme = "rose_pine_dawn"/' $HOME/.config/helix/config.toml
     fi
 
-    while read -r host; do
+    while IFS= read -r host
+    do
         if [[ $1 == 'dark' ]]
         then
-            ssh $host touch .darkmode
-            ssh $host bash <<EOF
-                if [[ -f $HOME/.config/helix/config.toml ]]
-                then
-                    sed -i 's/theme = ".*"/theme = "ayu_mirage"/' $HOME/.config/helix/config.toml
-                fi
-EOF
+            ssh $host touch .darkmode < /dev/null
+            change_theme "ayu_mirage"
         else
-            ssh $host rm -f $host
-            ssh $host bash <<EOF
-                if [[ -f $HOME/.config/helix/config.toml ]]
-                then
-                    sed -i 's/theme = ".*"/theme = "rose_pine_dawn"/' $HOME/.config/helix/config.toml
-                fi
-EOF
+            ssh $host rm -f .darkmode < /dev/null
+            change_theme "rose_pine_dawn"
         fi
-    done < $HOME/.ssh/servers
+    done < <(cat "$HOME/.ssh/servers")
 
     files="/tmp/kitty-$USER-*"
     for instance in $files
@@ -48,7 +48,6 @@ then
   exit 1
 fi
 
-set -x
 # Check if option is "dark" or "light"
 if [ "$option" == "dark" ]; then
     touch $HOME/.darkmode
