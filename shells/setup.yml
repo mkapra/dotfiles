@@ -83,7 +83,12 @@
   when: download_starship is succeeded
 
 - name: Remove the downloaded script
-  file:
+  ansible.builtin.file:
     path: /tmp/install_starship.sh
     state: absent
   when: download_starship is succeeded
+
+- name: Setup rc script for ssh
+  ansible.builtin.copy:
+    src: ssh_rc
+    dest: ~/.ssh/rc

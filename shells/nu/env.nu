@@ -84,11 +84,13 @@ $env.NU_PLUGIN_DIRS = [
 ]
 
 if (which cargo | select path | length) != 0 {
-    $env.PATH = ($env.PATH | split row (char esep) | prepend '/home/mkapra/.cargo/bin')
+    $env.PATH = ($env.PATH | split row (char esep) | prepend $"($env.HOME)/.cargo/bin")
 }
 
 if (which fnm | select path | length) != 0 {
-    $env.PATH = ($env.PATH | split row (char esep) | append '/home/mkapra/.fnm')
+    $env.PATH = ($env.PATH | split row (char esep) | append $"($env.HOME)/.fnm")
     load-env (fnm env --shell bash | lines | str replace 'export ' '' | str replace -a '"' '' | split column = | rename name value | where name != "FNM_ARCH" and name != "PATH" | reduce -f {} {|it, acc| $acc | upsert $it.name $it.value })
     $env.PATH = ($env.PATH | prepend $"($env.FNM_MULTISHELL_PATH)/bin")
 }
+
+$env.SSH_AUTH_SOCK = $"($env.HOME)/.ssh/ssh_auth_sock"
