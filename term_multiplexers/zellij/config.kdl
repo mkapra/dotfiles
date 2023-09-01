@@ -16,7 +16,7 @@ keybinds {
 // Once these themes are defined, one of them should to be selected in the "theme" section of this file
 //
 themes {
-	rose-pine-dawn {
+	rose_pine_dawn {
 		bg "#faf4ed"
 		fg "#575279"
 		red "#b4637a"
@@ -29,22 +29,23 @@ themes {
 		black "#f2e9e1"
 		white "#575279"
 	}
-	rose-pine-moon {
-		bg "#232136"
-		fg "#e0def4"
-		red "#eb6f92"
-		green "#3e8fb0"
-		blue "#9ccfd8"
-		yellow "#f6c177"
-		magenta "#c4a7e7"
-		orange "#fe640b"
-		cyan "#ea9a97"
-		black "#393552"
-		white "#e0def4"
+	ayu_mirage {
+	    bg "#212733"
+	    fg "#D9D7CE"
+	    red "#FFAE57"
+	    green "#80D4FF"
+	    blue "#5CCFE6"
+	    yellow "#D4BFFF"
+	    magenta "#F07178"
+	    orange "#FFD57F"
+	    cyan "#95E6CB"
+	    black "#272D38"
+	    white "#FFFFFF"
 	}
 }
 
 // Choose the theme that is specified in the themes section.
 // Default: default
 //
-theme "rose-pine-dawn"
+theme "ayu_mirage"
+pane_frames false
