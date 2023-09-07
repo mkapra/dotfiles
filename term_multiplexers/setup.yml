@@ -2,7 +2,13 @@
 
 # zellij
 - name: Check if zellij needs to be configured
-  ansible.builtin.command: which zellij
+  ansible.builtin.find:
+    paths:
+      - /usr/bin
+      - /usr/local/bin
+      - ~/.cargo/bin
+    patterns: zellij
+    recurse: true
   register: zellij_path
   failed_when: false
 
@@ -10,13 +16,13 @@
   ansible.builtin.file:
     path: ~/.config/zellij
     state: directory
-  when: zellij_path.rc == 0
+  when: zellij_path['files']
 
 - name: Copy zellij configuration
   ansible.builtin.copy:
     src: zellij/config.kdl
     dest: ~/.config/zellij
-  when: zellij_path.rc == 0
+  when: zellij_path['files']
 
 # tmux
 - name: Check if tmux needs to be configured
