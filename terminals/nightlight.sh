@@ -9,6 +9,10 @@ change_theme() {
         then
             sed -i 's/theme = ".*"/theme = "$1"/' $HOME/.config/helix/config.toml
         fi
+        if [[ -f $HOME/.config/zellij/config.kdl ]]
+        then
+            sed -i 's/theme ".*"/theme "$1"/' $HOME/.config/zellij/config.kdl
+        fi
 EOF
 }
 
